@@ -1,9 +1,100 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+:root {
+  font-size: 16px;
+}
 @layer components {
   .input {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    @apply bg-gray-100 transition-colors duration-300 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
+  .btn {
+    @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg  py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800  flex justify-center items-center;
+  }
+  .label {
+    @apply dark:text-white text-darkBlue text-base;
+  }
+  .link {
+    @apply text-blue-700 hover:underline dark:text-blue-500;
+  }
+  .form {
+    @apply w-full max-w-sm flex flex-col  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700;
+  }
+}
+.ProseMirror {
+  @apply space-y-2;
+}
+.ProseMirror blockquote {
+  @apply p-3 border-s-4 border-gray-300 bg-gray-100 italic tracking-wider dark:border-gray-500 dark:bg-gray-700 dark:text-white text-darkBlue text-lg rounded-tr rounded-br;
+}
+.ProseMirror ul {
+  @apply list-disc px-4 ms-3 space-y-1;
+}
+.ProseMirror ol {
+  @apply list-decimal px-4 ms-3 space-y-1;
+}
+.ProseMirror h2 {
+  @apply text-xl font-semibold;
+}
+
+.ProseMirror pre {
+  @apply bg-code-bg text-white font-jetbrains p-code px-code-x rounded-code;
+}
+
+.ProseMirror pre code {
+  @apply text-inherit p-0 bg-transparent text-code;
+}
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-comment;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-name,
+.hljs-regexp,
+.hljs-link,
+.hljs-selector-id,
+.hljs-selector-class {
+  @apply text-variable;
+}
+
+.hljs-number,
+.hljs-meta,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params {
+  @apply text-number-meta;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet {
+  @apply text-string-symbol-bullet;
+}
+
+.hljs-title,
+.hljs-section {
+  @apply text-title-section;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  @apply text-keyword-tag;
+}
+
+.hljs-emphasis {
+  @apply italic;
+}
+
+.hljs-strong {
+  @apply font-bold;
+}
+.ProseMirror hr {
+  @apply max-w-32 mx-auto rounded-md border-2 dark:border-gray-700 border-gray-300;
 }

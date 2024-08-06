@@ -13,7 +13,7 @@ import {
   getRefreshTokenCookieOptions,
   setAuthCookies,
 } from "../utils/cookies";
-import { CREATED, NOT_FOUND, OK, UNAUTHORIZED } from "../constants/http";
+import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
 import {
   emailSchema,
   loginSchema,
@@ -24,7 +24,7 @@ import {
 import { verifyToken } from "../utils/jwt";
 import sessionModel from "../models/sessionModel";
 import appAssert from "../utils/appAssert";
-import userModel from "../models/userModel";
+import AppErrorCode from "../constants/AppErrorCode";
 
 export const registerHandler = catchErrors(async (req, res) => {
   const request = registerSchema.parse({
@@ -62,17 +62,21 @@ export const logoutHandler = catchErrors(async (req, res) => {
 
 export const refreshHandler = catchErrors(async (req, res) => {
   const refreshToken = req.cookies.refreshToken as string | undefined;
-  appAssert(refreshToken, UNAUTHORIZED, "Missing refresh token");
+  appAssert(
+    refreshToken,
+    UNAUTHORIZED,
+    "Missing refresh token",
+    AppErrorCode.MissingRefreshToken
+  );
   const { accessToken, newRefreshToken } = await refreshUserAccessToken(
     refreshToken
   );
   if (newRefreshToken) {
     res.cookie("refreshToken", newRefreshToken, getRefreshTokenCookieOptions());
   }
-
   return res
-    .cookie("accessToken", accessToken, getAccessTokenCookieOptions())
     .status(OK)
+    .cookie("accessToken", accessToken, getAccessTokenCookieOptions())
     .json({ message: "Access token refreshed" });
 });
 

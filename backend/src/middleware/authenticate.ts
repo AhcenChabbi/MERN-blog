@@ -3,15 +3,16 @@ import appAssert from "../utils/appAssert";
 import { UNAUTHORIZED } from "../constants/http";
 import { verifyToken } from "../utils/jwt";
 import AppErrorCode from "../constants/AppErrorCode";
-const authenticate: RequestHandler = async (req, res, next) => {
-  const accesToken = req.cookies.accessToken as string | undefined;
+import catchErrors from "../utils/catchErrors";
+const authenticate: RequestHandler = catchErrors(async (req, res, next) => {
+  const accessToken = req.cookies.accessToken as string | undefined;
   appAssert(
-    accesToken,
+    accessToken,
     UNAUTHORIZED,
     "Not authorized",
     AppErrorCode.InvalidAccessToken
   );
-  const { payload, error } = verifyToken(accesToken);
+  const { payload, error } = verifyToken(accessToken);
   appAssert(
     payload,
     UNAUTHORIZED,
@@ -22,6 +23,6 @@ const authenticate: RequestHandler = async (req, res, next) => {
   req.userId = payload.userId;
   req.sessionId = payload.sessionId;
   next();
-};
+});
 
 export default authenticate;

@@ -18,7 +18,6 @@ import {
   oneYearFromNow,
   thirtyDaysFromNow,
 } from "../utils/date";
-import jwt from "jsonwebtoken";
 import {
   RefreshTokenPayload,
   RefreshTokenSignOptionsAndSecret,
@@ -31,6 +30,7 @@ import {
   getVerifyEmailTemplate,
 } from "../utils/emailTemplates";
 import { hashValue } from "../utils/bcrypt";
+import AppErrorCode from "../constants/AppErrorCode";
 
 type CreateAccountParams = {
   username: string;
@@ -62,7 +62,7 @@ export const createAccount = async (data: CreateAccountParams) => {
   const verificationCode = await verificationCodeModel.create({
     userId,
     type: verificationCodeType.EmailVerification,
-    expireAt: oneYearFromNow(),
+    expiresAt: oneYearFromNow(),
   });
 
   const url = `${APP_ORIGIN}/verify/email/${verificationCode._id}`;
@@ -160,7 +160,7 @@ export const verifyEmail = async (code: string) => {
   const validCode = await verificationCodeModel.findOne({
     _id: code,
     type: verificationCodeType.EmailVerification,
-    expireAt: { $gt: new Date() },
+    expiresAt: { $gt: new Date() },
   });
 
   appAssert(validCode, NOT_FOUND, "Invalid or expired verification code");
@@ -197,16 +197,16 @@ export const sendPasswordResetEmail = async (email: string) => {
     "Too many requests, please try again later"
   );
 
-  const expireAt = oneHourFromNow();
+  const expiresAt = oneHourFromNow();
   const verificationCode = await verificationCodeModel.create({
     userId,
     type: verificationCodeType.PasswordReset,
-    expireAt,
+    expiresAt,
   });
 
   const url = `${APP_ORIGIN}/password/reset?code=${
     verificationCode._id
-  }&exp=${expireAt.getTime()}`;
+  }&exp=${expiresAt.getTime()}`;
   const { data, error } = await sendMail({
     to: user.email,
     ...getPasswordResetTemplate(url),
@@ -232,7 +232,7 @@ export const resetPassword = async ({
   const validCode = await verificationCodeModel.findOne({
     _id: verificationCode,
     type: verificationCodeType.PasswordReset,
-    expireAt: { $gt: new Date() },
+    expiresAt: { $gt: new Date() },
   });
 
   appAssert(validCode, NOT_FOUND, "Invalid or expired verification code");

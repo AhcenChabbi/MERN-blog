@@ -10,9 +10,11 @@ import authRoute from "./routes/authRoutes";
 import authenticate from "./middleware/authenticate";
 import userRoutes from "./routes/userRoutes";
 import sessionRoutes from "./routes/sessionRoutes";
+import blogRoutes from "./routes/blogRoutes";
+import blogsRoutes from "./routes/blogsRoutes";
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(
   cors({
     origin: APP_ORIGIN,
@@ -24,6 +26,8 @@ app.use("/auth", authRoute);
 
 //protected routes
 app.use("/user", authenticate, userRoutes);
+app.use("/blog", authenticate, blogRoutes);
+app.use("/blogs", blogsRoutes);
 app.use("/sessions", authenticate, sessionRoutes);
 // health check
 app.get("/", async (_, res) => {

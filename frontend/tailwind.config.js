@@ -5,15 +5,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkBlue: "rgb(15, 23, 42)",
-        lightBlueSky: "rgb(56, 189, 248)",
-        lightGrey: "rgb(148, 163, 184)",
-        lightmediumGrey: "rgb(180, 180, 180)",
-
-        whiteSmoke: "rgb(242,242,242)",
-        blueSky: "rgb(14, 165, 233)",
-        darkGrey: "rgb(51, 65, 85)",
-        darkMediumGrey: "rgb(66, 74, 94)",
+        darkBlue: "#111827",
+        redError: "#ed1e48",
+        "code-bg": "#0D0D0D",
+        comment: "#616161",
+        variable: "#F98181",
+        "number-meta": "#FBBC88",
+        "string-symbol-bullet": "#B9F18D",
+        "title-section": "#FAF594",
+        "keyword-tag": "#70CFF8",
+      },
+      fontFamily: {
+        jetbrains: ["JetBrainsMono", "monospace"],
+      },
+      fontSize: {
+        code: "0.8rem",
+      },
+      borderRadius: {
+        code: "0.5rem",
+      },
+      spacing: {
+        code: "0.75rem",
+        "code-x": "1rem",
       },
     },
   },
