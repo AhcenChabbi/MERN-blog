@@ -11,20 +11,6 @@ export interface blogDocument extends mongoose.Document {
   totalReaction: number;
   totalBookmark: number;
   createdAt: Date;
-
-  getPublicFields: () => Pick<
-    blogDocument,
-    | "_id"
-    | "banner"
-    | "title"
-    | "content"
-    | "author"
-    | "readingTime"
-    | "totalBookmark"
-    | "totalReaction"
-    | "createdAt"
-  >;
-
   totalVisit: number;
   updatedAt: Date;
 }
@@ -67,11 +53,6 @@ const blogSchema = new mongoose.Schema<blogDocument>(
   },
   { timestamps: true }
 );
-blogSchema.methods.getPublicFields = function () {
-  const blog = this.toObject();
-  delete blog.totalVisit;
-  delete blog.updatedAt;
-  return blog;
-};
+
 const blogModel = mongoose.model<blogDocument>("Blog", blogSchema);
 export default blogModel;

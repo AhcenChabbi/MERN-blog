@@ -1,72 +1,60 @@
 import { z } from "zod";
 import { blogSchema } from "../constants/constants";
-import { useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuUploadCloud } from "react-icons/lu";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useMutation } from "@tanstack/react-query";
-import { createBlog } from "../lib/api";
-import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import { convertBase64 } from "../utils";
 import TextEditor from "./TextEditor";
-import queryClient from "../config/queryClient";
-import { allBlogs } from "../hooks/queries/useBlogs";
-import { navigate } from "../lib/navigation";
+import { useCreateBlog } from "../hooks/mutations/mutations";
+import { useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 type FormFields = z.infer<typeof blogSchema>;
+type LocationState = {
+  defaultValues: FormFields;
+  blogId: string;
+};
 const CreateBlogForm = () => {
+  const { state } = useLocation();
+  const { defaultValues, blogId } = (state as LocationState) || {};
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
     control,
-  } = useForm<FormFields>({ resolver: zodResolver(blogSchema) });
-  const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setValue("banner", file, { shouldValidate: true });
-      setBannerUrl(URL.createObjectURL(file));
+    watch,
+  } = useForm<FormFields>({ resolver: zodResolver(blogSchema), defaultValues });
+  const handleFileInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const bannerUrl = await convertBase64(file);
+      setValue("banner", bannerUrl, { shouldValidate: true });
     }
   };
   const handleDeleteImage = () => {
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-    setValue("banner", new File([], ""), { shouldValidate: true });
-    setBannerUrl(null);
+    setValue("banner", "", { shouldValidate: true });
   };
-  const { mutate: createBlogHandler, isPending } = useMutation({
-    mutationFn: createBlog,
-    onSuccess: () => {
-      toast.success("Blog created successfully");
-      queryClient.invalidateQueries({ queryKey: [allBlogs] });
-      navigate("/");
-    },
-    onError: () => {
-      toast.error("An error occured please try again");
-    },
-  });
+  const { mutate: createBlog, isPending } = useCreateBlog();
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const imageUrl = await convertBase64(data.banner);
-    createBlogHandler({
-      banner: imageUrl,
-      title: data.title,
-      content: data.content,
-    });
+    createBlog(data);
   };
+  const bannerUrl = watch("banner");
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="form max-w-3xl p-2  sm:p-4 md:p-6 space-y-4  mx-2"
     >
-      <div className="">
+      <div>
         <input
-          onChange={handleInputFileChange}
+          onChange={handleFileInputChange}
           ref={inputRef}
           type="file"
           className="hidden"

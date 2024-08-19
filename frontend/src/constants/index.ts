@@ -32,7 +32,5 @@ export interface Blog {
   readingTime: number;
   createdAt: string;
   updatedAt: string;
-  likes: Pick<User, "profile" | "username" | "_id">[];
-  bookmarks: Pick<User, "profile" | "username" | "_id">[];
   totalVisit: number;
 }

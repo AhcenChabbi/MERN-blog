@@ -5,18 +5,16 @@ import { MdError } from "react-icons/md";
 
 const Blog = () => {
   const { blogId } = useParams();
-  const { data, isPending, isError, isSuccess, error } = useGetBlogById(
-    blogId || ""
-  );
+  const { data, isPending, isError, error } = useGetBlogById(blogId || "");
 
   return (
-    <div className="py-5">
+    <div className="pt-5 flex-grow flex mx-auto w-full max-w-3xl ">
       {isPending ? (
-        <div className="flex justify-center items-center">
+        <div className="flex w-full justify-center items-center">
           <Spinner size={10} />
         </div>
       ) : isError ? (
-        <div className="bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-400 border border-red-300 dark:border-red-800 text-lg gap-2 flex items-center justify-center rounded-lg p-2 max-w-fit flex-wrap text-center mx-auto">
+        <div className="bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-400 border border-red-300 dark:border-red-800 text-lg gap-2 self-start flex items-center justify-center rounded-lg p-2 max-w-fit flex-wrap text-center mx-auto">
           <MdError className="text-2xl" />
           <p>
             {error.message ||
@@ -24,8 +22,7 @@ const Blog = () => {
           </p>
         </div>
       ) : (
-        isSuccess &&
-        data && <BlogDetail blog={data.blog} authorBlogs={data.authorBlogs} />
+        <BlogDetail blog={data.blog} authorBlogs={data.authorBlogs} />
       )}
     </div>
   );

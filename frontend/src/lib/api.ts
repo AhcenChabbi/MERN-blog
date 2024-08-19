@@ -1,6 +1,12 @@
 import { z } from "zod";
 import API from "../config/apiClient";
-import { IBlog, loginSchema, signUpSchema } from "../constants/constants";
+import {
+  IBlog,
+  loginSchema,
+  signUpSchema,
+  updateUserPasswordSchema,
+  UpdateUserSchema,
+} from "../constants/constants";
 import { Blog, User } from "../constants";
 type loginCredentials = z.infer<typeof loginSchema>;
 
@@ -29,14 +35,24 @@ export const resetPassword = async ({
 export const getUser = async () => API.get<User>("/user");
 export const logout = async () => API.get("/auth/logout");
 
+export const updateUser = async (
+  data: Partial<z.infer<typeof UpdateUserSchema>>
+) => API.patch<User>(`/user`, data);
+
+export const updatePassword = async (
+  data: z.infer<typeof updateUserPasswordSchema>
+) => API.patch<User>(`/user/updatePassword`, data);
+
+export const deleteAccount = async () => API.delete("/user");
 // Blog
 
-export const createBlog = async (data: IBlog) => API.post("/blog", data);
-
+export const createBlog = async (data: IBlog) => API.post<Blog>("/blog", data);
+type blogsPagination = {
+  blogs: Blog[];
+  totalPages: number;
+};
 export const getBlogs = async (page = 1, limit = 9) =>
-  API.get<{ blogs: Blog[]; totalPages: number }>(
-    `/blogs?page=${page}&limit=${limit}`
-  );
+  API.get<blogsPagination>(`/blogs?page=${page}&limit=${limit}`);
 
 export const getBlogbyId = async (blogId: string) =>
   API.get<{
@@ -50,3 +66,29 @@ export const likeBlog = async (blogId: string) =>
 
 export const bookMarkBlog = async (blogId: string) =>
   API.post<BlogReaction>(`/blog/bookmarked/${blogId}`);
+
+export const getReadingList = async (blogIds: string[], page = 1, limit = 9) =>
+  API.post<blogsPagination>(`/blog/readinglist?page=${page}&limit=${limit}`, {
+    blogIds: blogIds,
+  });
+
+export const incrementBlogTotalVisit = async (blogId: string) =>
+  API.post<string>(`/blogs/${blogId}/visit`);
+
+export type BlogDashboard = {
+  blogs: Blog[];
+};
+export const getCurrentUserBlogs = async () => API.get<BlogDashboard>(`/blog`);
+
+export const deleteBlog = async (blogId: string) =>
+  API.delete<{ user: User }>(`/blog/${blogId}`);
+
+export type userAndUserBlogs = {
+  user: Pick<
+    User,
+    "username" | "bio" | "profile" | "createdAt" | "blogPublished" | "_id"
+  >;
+  blogs: Blog[];
+};
+export const getUserAndUserBlogs = async (username: string) =>
+  API.get<userAndUserBlogs>(`/blogs/userBlogs/${username}`);

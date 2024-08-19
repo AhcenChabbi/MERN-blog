@@ -1,0 +1,126 @@
+import { useMutation } from "@tanstack/react-query";
+import {
+  BlogDashboard,
+  BlogReaction,
+  bookMarkBlog,
+  createBlog,
+  deleteAccount,
+  deleteBlog,
+  incrementBlogTotalVisit,
+  likeBlog,
+  updatePassword,
+  updateUser,
+} from "../../lib/api";
+import { allBlogs, blog, currentUserBlogs } from "../queries/useBlogs";
+import queryClient from "../../config/queryClient";
+import toast from "react-hot-toast";
+import { AUTH } from "../queries/useAuth";
+import { navigate } from "../../lib/navigation";
+
+export const useDeleteBlog = () => {
+  return useMutation({
+    mutationFn: deleteBlog,
+    onSuccess: (data, blogId) => {
+      toast.success("Blog Deleted");
+      queryClient.setQueryData([currentUserBlogs], (oldData: BlogDashboard) => {
+        return { blogs: oldData.blogs.filter((blog) => blog._id !== blogId) };
+      });
+      queryClient.setQueryData([AUTH], data.user);
+    },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
+  });
+};
+
+export const useUpdateUser = () => {
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess: (data) => {
+      queryClient.setQueryData([AUTH], data);
+      toast.success("User  Updated");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Something went wrong while updating user");
+    },
+  });
+};
+
+export const useUpdateUserPassword = () => {
+  return useMutation({
+    mutationFn: updatePassword,
+    onSuccess: () => {
+      toast.success("Password Updated");
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || "Something went wrong while updating password"
+      );
+    },
+  });
+};
+
+const onSuccess = (data: BlogReaction, blogId: string) => {
+  queryClient.setQueryData([blog, blogId], (oldData: BlogReaction) => {
+    return {
+      ...oldData,
+      blog: data.blog,
+    };
+  });
+  queryClient.setQueryData([AUTH], data.user);
+};
+
+export const useLikeBlog = () => {
+  return useMutation({
+    mutationFn: likeBlog,
+    onSuccess: (data, blogId) => {
+      onSuccess(data, blogId);
+    },
+  });
+};
+
+export const useBookmarkBlog = () => {
+  return useMutation({
+    mutationFn: bookMarkBlog,
+    onSuccess: (data, blogId) => {
+      onSuccess(data, blogId);
+    },
+  });
+};
+
+export const useIncrementTotalVisit = (onSuccess: (data: string) => void) => {
+  return useMutation({
+    mutationFn: incrementBlogTotalVisit,
+    onSuccess: (data) => {
+      onSuccess(data);
+    },
+  });
+};
+
+export const useCreateBlog = () => {
+  return useMutation({
+    mutationFn: createBlog,
+    onSuccess: (data) => {
+      toast.success("Blog created successfully");
+      queryClient.invalidateQueries({ queryKey: [allBlogs] });
+      navigate(`/blog/${data._id}`);
+    },
+    onError: () => {
+      toast.error("An error occured please try again");
+    },
+  });
+};
+
+export const useDeleteAccount = () => {
+  return useMutation({
+    mutationFn: deleteAccount,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: [AUTH] });
+      toast.success("Account deleted successfully");
+      navigate("/", { replace: true });
+    },
+    onError: () => {
+      toast.error("An error occured please try again");
+    },
+  });
+};

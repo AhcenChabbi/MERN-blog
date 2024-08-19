@@ -3,8 +3,6 @@ import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,
   CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_FOLDER_NAME,
-  CLOUDINARY_UPLOAD_PRESET,
 } from "../constants/env";
 import { IImage } from "../constants/Image";
 cloudinary.config({
@@ -31,5 +29,16 @@ export const uploadToCloudinary = (file: string): Promise<IImage> => {
         return reject(new Error("Upload failed with no result"));
       }
     );
+  });
+};
+
+export const deleteFromCloudinary = (publicId: string) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(result);
+    });
   });
 };

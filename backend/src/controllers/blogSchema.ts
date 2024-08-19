@@ -5,3 +5,7 @@ export const blogSchema = z.object({
   title: z.string(),
   content: z.string(),
 });
+
+export const stringArraySchema = z.object({
+  blogIds: z.array(z.string()),
+});

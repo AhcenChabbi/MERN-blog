@@ -63,9 +63,7 @@ export const toggleLike = async ({ blogId, userId }: toggleParams) => {
   ]);
 
   return {
-    blog: (
-      await updatedBlog.populate(authorFieldsProjection)
-    ).getPublicFields(),
+    blog: (await updatedBlog.populate(authorFieldsProjection)).toObject(),
     user: updatedUser.omitPassword(),
   };
 };
@@ -92,9 +90,7 @@ export const toggleBookmark = async ({ blogId, userId }: toggleParams) => {
   ]);
 
   return {
-    blog: (
-      await updatedBlog.populate(authorFieldsProjection)
-    ).getPublicFields(),
+    blog: (await updatedBlog.populate(authorFieldsProjection)).toObject(),
     user: updatedUser.omitPassword(),
   };
 };

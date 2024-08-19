@@ -8,7 +8,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
       className={`${theme} ${theme === "dark" ? "bg-darkBlue" : "bg:white"}`}
     >
       <div
-        className={`min-h-screen flex flex-col dark:bg-darkBlue bg-white 2xl:container 2xl:mx-auto`}
+        className={`min-h-screen flex flex-col dark:bg-darkBlue bg-white 2xl:container 2xl:mx-auto transition-colors duration-200`}
       >
         {children}
       </div>

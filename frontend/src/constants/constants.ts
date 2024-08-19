@@ -1,20 +1,27 @@
+import { Variants } from "framer-motion";
 import { z } from "zod";
+// zod validation schema
 export const emailSchema = z.string().email({ message: "Email not valid" });
-export const passwordSchema = z.string().min(8).max(255);
-export const BlogName = "DevLog";
+export const passwordSchema = z
+  .string()
+  .min(8, { message: "Password too short" })
+  .max(255, {
+    message: "Password too long",
+  });
 export const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
+export const usernameSchema = z
+  .string()
+  .min(3, { message: "Username must be at least 3 characters long" })
+  .max(20, { message: "Username must be at most 20 characters long" })
+  .regex(/^[a-zA-Z0-9_]+$/, {
+    message: "Username can only contain letters, numbers, and underscores",
+  });
 export const signUpSchema = loginSchema
   .extend({
-    username: z
-      .string()
-      .min(3, { message: "Username must be at least 3 characters long" })
-      .max(20, { message: "Username must be at most 20 characters long" })
-      .regex(/^[a-zA-Z0-9_]+$/, {
-        message: "Username can only contain letters, numbers, and underscores",
-      }),
+    username: usernameSchema,
     confirmPassword: z.string().min(8).max(255),
   })
   .refine(({ confirmPassword, password }) => confirmPassword === password, {
@@ -22,18 +29,32 @@ export const signUpSchema = loginSchema
     path: ["confirmPassword"],
   });
 
-const allowedFileTypes = ["image/jpeg", "image/png"];
+export const updateUserPasswordSchema = z
+  .object({
+    oldPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmNewPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords don't match",
+    path: ["confirmNewPassword"],
+  })
+  .refine((data) => data.newPassword !== data.oldPassword, {
+    message: "New password cannot be the same as old password",
+    path: ["newPassword"],
+  });
+export const UpdateUserSchema = z.object({
+  profile: z.string().min(1),
+  username: usernameSchema,
+  email: emailSchema,
+  bio: z
+    .string()
+    .min(1, { message: "Bio is required" })
+    .max(100, { message: "Bio must be at most 100 characters" }),
+});
 
 export const blogSchema = z.object({
-  banner: z
-    .instanceof(File, { message: "Banner is required" })
-    .refine(
-      (file) =>
-        allowedFileTypes.includes(file.type) && file.size <= 5 * 1024 * 1024,
-      {
-        message: "File must be an image (JPEG, PNG, GIF) and not exceed 5MB",
-      }
-    ),
+  banner: z.string().min(1, { message: "Banner is required" }),
   title: z
     .string()
     .min(3, { message: "Title must be at least 3 characters" })
@@ -48,8 +69,29 @@ export const blogSchema = z.object({
     .min(10, { message: "Content must be at least 10 characters" })
     .max(5000, { message: "Content must be at most 5000 characters" }),
 });
+
+//other constants
 export interface IBlog {
   banner: string;
   title: string;
   content: string;
 }
+
+export const BlogName = "DevLog";
+export const variants: Variants = {
+  initial: {
+    opacity: 0,
+    y: -20,
+    transition: { duration: 0.5, type: "spring" },
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, type: "spring" },
+  },
+  exit: {
+    y: 20,
+    opacity: 0,
+    transition: { duration: 0.3, type: "spring" },
+  },
+};

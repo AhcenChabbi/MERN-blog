@@ -1,66 +1,50 @@
-import { FaRegHeart } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
-import { formatDate } from "../utils";
+import { FaRegHeart } from "react-icons/fa6";
 import { Blog } from "../constants";
 import { navigate } from "../lib/navigation";
-const BlogCard = ({
-  _id: blogId,
-  author: {
-    profile: { url: authorProfile },
-    username,
-    //_id: userId,
-  },
-  banner: { url },
-  createdAt,
-  readingTime,
-  title,
-  totalBookmark,
-  totalReaction,
-}: Blog) => {
+import { formatDate } from "../utils";
+import { IoBookmarkOutline } from "react-icons/io5";
+
+const AuthorBlogCard = (authorBlog: Blog) => {
   return (
     <div
-      onClick={() => navigate(`/blog/${blogId}`)}
-      className="bg-white border border-gray-200 rounded-md shadow dark:bg-gray-800 cursor-pointer dark:border-gray-700 overflow-hidden hover:border-blue-600 dark:hover:border-blue-600 transition-all duration-300 hover:cursor-pointer"
+      key={authorBlog._id}
+      onClick={() => navigate(`/blog/${authorBlog._id}`)}
+      className="bg-white border border-gray-200 rounded-md shadow dark:bg-gray-800 cursor-pointer dark:border-gray-700 overflow-hidden hover:border-blue-600 dark:hover:border-blue-600 transition-all duration-300 hover:cursor-pointer "
     >
-      <img
-        src={url}
-        alt="blog banner"
-        className="object-cover max-h-36 w-full"
-      />
       <div className="space-y-2 divide-y divide-gray-200 dark:divide-gray-600">
-        <div className="p-3 space-y-3">
+        <div className="p-2 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-x-2.5">
               <img
                 className="rounded-full size-8 object-cover"
-                src={authorProfile}
+                src={authorBlog.author.profile.url}
                 alt="author profile"
               />
               <div className="text-sm font-normal ">
                 <p className="font-medium text-gray-800 dark:text-gray-300">
-                  {username}
+                  {authorBlog.author.username}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400">
-                  {formatDate(createdAt)}
+                  {formatDate(authorBlog.createdAt)}
                 </p>
               </div>
             </div>
             <p className="text-sm font-normal text-gray-800 dark:text-gray-300">
-              {readingTime} min read
+              {authorBlog.readingTime} min read
             </p>
           </div>
           <h1 className="text-gray-800 dark:text-white text-lg font-normal">
-            {title}
+            {authorBlog.title}
           </h1>
         </div>
         <div className="flex items-center gap-2 text-base font-normal text-gray-800 dark:text-gray-400 p-2 flex-wrap">
           <div className="flex items-center gap-2 min-w-fit">
             <FaRegHeart />
-            <p>{totalReaction} Reactions</p>
+            <p>{authorBlog.totalReaction} Reactions</p>
           </div>
           <div className="flex items-center gap-2 min-w-fit">
             <IoBookmarkOutline />
-            <p>{totalBookmark} Bookmarks</p>
+            <p>{authorBlog.totalBookmark} Bookmarks</p>
           </div>
         </div>
       </div>
@@ -68,4 +52,4 @@ const BlogCard = ({
   );
 };
 
-export default BlogCard;
+export default AuthorBlogCard;

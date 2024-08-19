@@ -18,3 +18,20 @@ export const convertBase64 = (file: File): Promise<string> => {
     };
   });
 };
+
+export const getModifiedData = <T extends object>(
+  initial: T,
+  current: T
+): Partial<T> => {
+  const modified: Partial<T> = {};
+  (Object.keys(current) as (keyof T)[]).forEach((key) => {
+    if (initial[key] !== current[key]) {
+      modified[key] = current[key];
+    }
+  });
+  return modified;
+};
+
+export const isEmptyObject = (obj: object) => {
+  return Object.keys(obj).length === 0;
+};

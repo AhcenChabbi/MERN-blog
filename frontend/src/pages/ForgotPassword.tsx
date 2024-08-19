@@ -6,9 +6,10 @@ import { z } from "zod";
 import { sendPasswordResetEmail } from "../lib/api";
 import toast from "react-hot-toast";
 import { Spinner } from "../components";
+import { emailSchema } from "../constants/constants";
 
 const schema = z.object({
-  email: z.string().email({ message: "Email not valid" }),
+  email: emailSchema,
 });
 type FormFields = z.infer<typeof schema>;
 

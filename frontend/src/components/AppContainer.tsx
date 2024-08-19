@@ -4,21 +4,25 @@ import { useAuth } from "../hooks/queries/useAuth";
 
 const AppContainer = () => {
   const { user, isLoading } = useAuth();
-  return isLoading ? (
-    <div className="flex-grow flex justify-center items-center">
-      <Spinner size={10} />
-    </div>
-  ) : user ? (
-    <Outlet />
-  ) : (
-    <Navigate
-      to="/signin"
-      replace={true}
-      state={{
-        redirectUrl: window.location.pathname,
-      }}
-    />
-  );
+  if (isLoading) {
+    return (
+      <div className="flex-grow flex justify-center items-center">
+        <Spinner size={10} />
+      </div>
+    );
+  }
+  if (!user) {
+    return (
+      <Navigate
+        to="/signin"
+        replace={true}
+        state={{
+          redirectUrl: window.location.pathname,
+        }}
+      />
+    );
+  }
+  return <Outlet />;
 };
 
 export default AppContainer;
