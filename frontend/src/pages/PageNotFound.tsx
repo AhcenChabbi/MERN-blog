@@ -13,10 +13,11 @@ const PageNotFound = () => {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.5, y: -50 }}
         transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-        className="text-center text-darkBlue dark:text-white space-y-3"
+        className="text-center flex flex-col justify-center items-center text-darkBlue dark:text-white space-y-3.5"
       >
+        <h1 className="text-6xl font-bold">404</h1>
         <h1 className="text-6xl font-bold">Page Not Found</h1>
-        <p className="text-xl">
+        <p className="text-xl max-w-96">
           The page you are looking for does not exist or has been moved.
         </p>
         <Link to="/" className="link">

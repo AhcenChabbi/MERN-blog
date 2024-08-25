@@ -60,9 +60,6 @@ export const blogSchema = z.object({
     .min(3, { message: "Title must be at least 3 characters" })
     .regex(/^[a-zA-Z0-9 ]*$/, {
       message: "Title can only contain letters, numbers, and spaces",
-    })
-    .refine((title) => title.trim() === title, {
-      message: "Title must not have leading or trailing spaces",
     }),
   content: z
     .string()
@@ -71,11 +68,7 @@ export const blogSchema = z.object({
 });
 
 //other constants
-export interface IBlog {
-  banner: string;
-  title: string;
-  content: string;
-}
+export type IBlog = z.infer<typeof blogSchema>;
 
 export const BlogName = "DevLog";
 export const variants: Variants = {

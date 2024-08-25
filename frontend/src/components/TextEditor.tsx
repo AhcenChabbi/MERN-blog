@@ -8,6 +8,7 @@ import { common, createLowlight } from "lowlight";
 const extensions = [
   StarterKit.configure({
     codeBlock: false,
+    horizontalRule: false,
   }),
   Underline,
   CodeBlockLowlight.configure({

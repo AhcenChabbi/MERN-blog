@@ -44,8 +44,8 @@ export const updatePassword = async (
 ) => API.patch<User>(`/user/updatePassword`, data);
 
 export const deleteAccount = async () => API.delete("/user");
-// Blog
 
+// Blog
 export const createBlog = async (data: IBlog) => API.post<Blog>("/blog", data);
 type blogsPagination = {
   blogs: Blog[];
@@ -92,3 +92,10 @@ export type userAndUserBlogs = {
 };
 export const getUserAndUserBlogs = async (username: string) =>
   API.get<userAndUserBlogs>(`/blogs/userBlogs/${username}`);
+
+export type UpdateBlogParams = {
+  blogId: string;
+  data: Partial<IBlog>;
+};
+export const updateBlog = async ({ blogId, data }: UpdateBlogParams) =>
+  API.patch<Blog>(`/blog/${blogId}`, data);

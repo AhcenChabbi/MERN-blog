@@ -17,6 +17,7 @@ import {
 } from "../pages";
 import PageNotFound from "../pages/PageNotFound";
 import { AnimatePresence } from "framer-motion";
+import AuthRedirect from "./AuthRedirect";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -31,14 +32,15 @@ const AnimatedRoutes = () => {
           <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/password/reset" element={<ResetPassword />} />
+        <Route element={<AuthRedirect />}>
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/password/reset" element={<ResetPassword />} />
+        </Route>
         <Route path="/verify/email/:code" element={<EmailVerification />} />
         <Route path="/blog/:blogId" element={<Blog />} />
         <Route path="/:username" element={<UserProfile />} />
-
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>

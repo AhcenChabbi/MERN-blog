@@ -8,6 +8,7 @@ import {
   deleteBlog,
   incrementBlogTotalVisit,
   likeBlog,
+  updateBlog,
   updatePassword,
   updateUser,
 } from "../../lib/api";
@@ -118,6 +119,22 @@ export const useDeleteAccount = () => {
       queryClient.removeQueries({ queryKey: [AUTH] });
       toast.success("Account deleted successfully");
       navigate("/", { replace: true });
+    },
+    onError: () => {
+      toast.error("An error occured please try again");
+    },
+  });
+};
+
+export const useUpdateBlog = () => {
+  return useMutation({
+    mutationFn: updateBlog,
+    onSuccess: (_, variables) => {
+      toast.success("Blog updated successfully");
+      queryClient.invalidateQueries({ queryKey: [allBlogs] });
+      queryClient.invalidateQueries({ queryKey: [currentUserBlogs] });
+      queryClient.invalidateQueries({ queryKey: [blog, variables.blogId] });
+      navigate(`/blog/${variables.blogId}`);
     },
     onError: () => {
       toast.error("An error occured please try again");

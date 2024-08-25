@@ -1,20 +1,15 @@
 import mongoose from "mongoose";
-import {
-  CREATED,
-  FORBIDDEN,
-  NOT_FOUND,
-  OK,
-  UNAUTHORIZED,
-} from "../constants/http";
+import { CREATED, FORBIDDEN, NOT_FOUND, OK } from "../constants/http";
 import {
   createBlog,
   toggleBookmark,
   toggleLike,
+  updateBlog,
 } from "../services/blogService";
 import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
-import { blogSchema, stringArraySchema } from "./blogSchema";
-import blogModel, { blogDocument } from "../models/blogModel";
+import { blogSchema, stringArraySchema, updateBlogSchema } from "./blogSchema";
+import blogModel from "../models/blogModel";
 import { authorFieldsProjection } from "../constants/authorFieldsProjection";
 import userModel from "../models/userModel";
 
@@ -28,6 +23,15 @@ export const createBlogHandler = catchErrors(async (req, res) => {
     author: userId,
   });
   return res.status(CREATED).json(newBlog);
+});
+
+export const updateBlogHandler = catchErrors(async (req, res) => {
+  const { banner, title, content } = updateBlogSchema.parse(req.body);
+  const { blogId } = req.params;
+  appAssert(mongoose.isValidObjectId(blogId), NOT_FOUND, "Blog not found");
+  const { userId } = req;
+  const { blog } = await updateBlog({ blogId, banner, title, content, userId });
+  return res.status(OK).json(blog);
 });
 
 export const toggleLikeHandler = catchErrors(async (req, res) => {

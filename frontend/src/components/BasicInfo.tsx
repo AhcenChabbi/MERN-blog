@@ -83,7 +83,7 @@ const BasicInfo = () => {
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-      className="dark:bg-gray-700 bg-white rounded-xl shadow p-4"
+      className="dark:bg-gray-800 bg-white rounded-xl shadow p-4"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5">
         <div className="flex items-center justify-between ">

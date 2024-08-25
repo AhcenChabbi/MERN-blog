@@ -12,10 +12,10 @@ import { hashValue } from "../utils/bcrypt";
 
 type UpdateUserCredentials = {
   userId: mongoose.Types.ObjectId;
-  profile: string | undefined;
-  username: string | undefined;
-  email: string | undefined;
-  bio: string | undefined;
+  profile?: string;
+  username?: string;
+  email?: string;
+  bio?: string;
 };
 export const updateUser = async ({
   userId,

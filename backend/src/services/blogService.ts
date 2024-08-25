@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import blogModel, { blogDocument } from "../models/blogModel";
-import { uploadToCloudinary } from "../utils/cloudinary";
+import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinary";
 import { getReadingTime } from "../utils/readingTime";
 import { NOT_FOUND, UNAUTHORIZED } from "../constants/http";
 import appAssert from "../utils/appAssert";
-import userModel, { userDocument } from "../models/userModel";
+import userModel from "../models/userModel";
+import { authorFieldsProjection } from "../constants/authorFieldsProjection";
 
 interface CreateBlogParams {
   banner: string;
@@ -34,10 +35,7 @@ type toggleParams = {
   blogId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
 };
-const authorFieldsProjection = {
-  path: "author",
-  select: "username profile _id",
-};
+
 export const toggleLike = async ({ blogId, userId }: toggleParams) => {
   const blog = (await blogModel.findById(blogId).populate({
     path: "author",
@@ -93,4 +91,39 @@ export const toggleBookmark = async ({ blogId, userId }: toggleParams) => {
     blog: (await updatedBlog.populate(authorFieldsProjection)).toObject(),
     user: updatedUser.omitPassword(),
   };
+};
+
+type UpdateBlogParams = {
+  blogId: string;
+  banner?: string;
+  title?: string;
+  content?: string;
+  userId: mongoose.Types.ObjectId;
+};
+export const updateBlog = async ({
+  blogId,
+  banner,
+  title,
+  content,
+  userId,
+}: UpdateBlogParams) => {
+  const blog = await blogModel.findById(blogId).populate({
+    path: "author",
+    select: "_id",
+  });
+  appAssert(blog, NOT_FOUND, "Blog not found");
+  appAssert(blog.author._id.equals(userId), UNAUTHORIZED, "Unauthorized");
+  if (banner && banner !== blog.banner.url) {
+    await deleteFromCloudinary(blog.banner.publicId);
+    blog.banner = await uploadToCloudinary(banner);
+  }
+  if (title && title !== blog.title) {
+    blog.title = title;
+  }
+  if (content && content !== blog.content) {
+    blog.content = content;
+    blog.readingTime = getReadingTime(content);
+  }
+  const updatedBlog = await blog.save();
+  return { blog: updatedBlog.toObject() };
 };

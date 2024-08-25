@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { MdError } from "react-icons/md";
 import { ResetPasswordForm } from "../components";
+import { error } from "../assets";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -13,20 +14,20 @@ const ResetPassword = () => {
       {linkIsValid ? (
         <ResetPasswordForm code={code} />
       ) : (
-        <div className="bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-400 border border-red-300 dark:border-red-800 text-lg flex flex-col items-center justify-center min-w-40 rounded-lg p-2">
-          <div className="flex items-center justify-center gap-2">
-            <MdError className="text-2xl" />
-            <p>Invalid link</p>
+        <div className="space-y-3 p-5 dark:bg-gray-800 bg-white shadow rounded-xl border border-gray-200 dark:border-gray-700 ">
+          <h1 className="text-2xl dark:text-white text-darkBlue font-semibold">
+            Error
+          </h1>
+          <img src={error} alt="party" className="w-20 mx-auto" />
+          <div className="flex items-center bg-red-300/40 dark:bg-red-300/20 gap-x-2 p-2 rounded-lg border border-red-300/75">
+            <MdError className=" text-xl text-center text-red-900 dark:text-white" />
+            <p className="text-red-900 dark:text-white">
+              The link is either expired or invalid
+            </p>
           </div>
-          <div>
-            <p>The link is either invalid or expired</p>
-            <Link
-              to="/forgotpassword"
-              className="hover:underline text-blue-600"
-            >
-              Request a new password reset link
-            </Link>
-          </div>
+          <Link className="link block text-center" to="/forgotpassword">
+            Request new link
+          </Link>
         </div>
       )}
     </div>

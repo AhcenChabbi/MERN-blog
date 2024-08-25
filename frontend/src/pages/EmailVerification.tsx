@@ -1,51 +1,56 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { verifyEmail } from "../lib/api";
-import { MdError } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { Spinner } from "../components";
+import { useAuth } from "../hooks/queries/useAuth";
+import { error, partyPopper } from "../assets";
+import { MdError } from "react-icons/md";
+
 const EmailVerification = () => {
   const { code } = useParams();
-  const { isLoading, isError, isSuccess } = useQuery({
+  const { isLoading, isError } = useQuery({
     queryFn: () => verifyEmail(code || ""),
     queryKey: ["emailVerification", code],
   });
+  const { user } = useAuth();
   return (
-    <div className="flex-grow flex items-start mt-5 justify-center">
+    <div className="flex-grow flex justify-center items-center">
       {isLoading ? (
         <Spinner size={10} />
       ) : (
-        <div
-          className={` ${
-            isSuccess
-              ? "p-4 text-lg text-green-800 border border-green-300 bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
-              : "bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-400 border border-red-300 dark:border-red-800 text-lg"
-          } flex flex-col items-center justify-center min-w-40 rounded-lg p-2`}
-        >
-          {isSuccess ? (
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-2xl" />
-              <p>Email verified</p>
-            </div>
+        <div className="space-y-3 p-5 dark:bg-gray-800 bg-white shadow rounded-xl border border-gray-200 dark:border-gray-700 ">
+          {isError ? (
+            <>
+              <h1 className="text-2xl dark:text-white text-darkBlue font-semibold">
+                Error
+              </h1>
+              <img src={error} alt="party" className="w-20 mx-auto" />
+              <div className="flex items-center bg-red-300/40 dark:bg-red-300/20 gap-x-2 p-2 rounded-lg border border-red-300/75">
+                <MdError className=" text-xl text-center text-red-900 dark:text-white" />
+                <p className="text-red-900 dark:text-white">
+                  The link is either expired or invalid
+                </p>
+              </div>
+            </>
           ) : (
             <>
-              <div className="flex items-center gap-2">
-                <MdError className="text-2xl" />
-                {isError && <p>Invalid link</p>}
+              <h1 className="text-2xl dark:text-white text-darkBlue font-semibold">
+                Done!
+              </h1>
+              <img src={partyPopper} alt="party" className="w-32 mx-auto" />
+              <div className="flex items-center bg-green-300/40 dark:bg-green-300/20 gap-x-2 p-2 rounded-lg">
+                <FaCheckCircle className=" text-xl text-center text-green-900 dark:text-white" />
+                <p className="text-green-900 dark:text-white">
+                  Success! Your email has been verified
+                </p>
               </div>
-              {isError ? (
-                <div className="flex flex-col items-center">
-                  <p>The link is either invalid or expired</p>
-                  <Link
-                    to="/forgotpassword"
-                    className="hover:underline text-blue-600"
-                  >
-                    Get new link
-                  </Link>
-                </div>
-              ) : (
-                <p>Something went wrong please try again</p>
-              )}
+              <Link
+                className="flex justify-center items-center bg-green-500/75 p-3 rounded-lg text-white hover:bg-green-500/60 font-medium transition-colors duration-300"
+                to={user ? "/" : "/signin"}
+              >
+                {user ? "Back to home" : "Sign in"}
+              </Link>
             </>
           )}
         </div>

@@ -116,6 +116,7 @@ const BlogDetail = ({
                 state={{
                   defaultValues: { banner: url, title, content },
                   blogId,
+                  isUpdatingState: true,
                 }}
                 className="flex items-center gap-1 px-4 py-1.5 rounded-3xl border dark:border-blue-400  border-darkBlue hover:bg-blue-50 dark:hover:bg-blue-50/10 transition-colors duration-300"
               >

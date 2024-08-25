@@ -5,19 +5,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LuUploadCloud } from "react-icons/lu";
 import { FaRegTrashCan } from "react-icons/fa6";
 import Spinner from "./Spinner";
-import { convertBase64 } from "../utils";
+import { convertBase64, getModifiedData, isEmptyObject } from "../utils";
 import TextEditor from "./TextEditor";
-import { useCreateBlog } from "../hooks/mutations/mutations";
+import { useCreateBlog, useUpdateBlog } from "../hooks/mutations/mutations";
 import { useLocation } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import toast from "react-hot-toast";
 type FormFields = z.infer<typeof blogSchema>;
 type LocationState = {
   defaultValues: FormFields;
   blogId: string;
+  isUpdatingState: boolean;
 };
 const CreateBlogForm = () => {
   const { state } = useLocation();
-  const { defaultValues, blogId } = (state as LocationState) || {};
+  const { defaultValues, blogId, isUpdatingState } = (state || {
+    defaultValues: {} as FormFields,
+    blogId: "",
+    isUpdatingState: false,
+  }) as LocationState;
   const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
@@ -42,9 +48,19 @@ const CreateBlogForm = () => {
     }
     setValue("banner", "", { shouldValidate: true });
   };
-  const { mutate: createBlog, isPending } = useCreateBlog();
+  const { mutate: createBlog, isPending: isCreatingStatus } = useCreateBlog();
+  const { mutate: updateBlog, isPending: isUpdatingStatus } = useUpdateBlog();
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    createBlog(data);
+    if (isUpdatingState) {
+      const modifiedData = getModifiedData(defaultValues, data);
+      if (isEmptyObject(modifiedData)) {
+        toast.error("No changes made");
+      } else {
+        updateBlog({ blogId, data: modifiedData });
+      }
+    } else {
+      createBlog(data);
+    }
   };
   const bannerUrl = watch("banner");
   return (
@@ -119,8 +135,18 @@ const CreateBlogForm = () => {
           <p className="text-redError text-base">{errors.content.message}</p>
         )}
       </div>
-      <button disabled={isPending} type="submit" className="btn self-end px-4">
-        {isPending ? <Spinner /> : "Publish"}
+      <button
+        disabled={isCreatingStatus || isUpdatingStatus}
+        type="submit"
+        className="btn self-end px-4"
+      >
+        {isCreatingStatus || isUpdatingStatus ? (
+          <Spinner />
+        ) : isUpdatingState ? (
+          "Update"
+        ) : (
+          "Create"
+        )}
       </button>
     </form>
   );

@@ -57,7 +57,7 @@ const Dashboard = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, delay: ind * 0.2, type: "spring" }}
               key={statistic.title}
-              className="flex items-center gap-x-2 dark:bg-gray-700 bg-gray-100 rounded-md py-4 px-3 flex-grow"
+              className="flex items-center gap-x-2 dark:bg-gray-800 bg-gray-100 rounded-md py-4 px-3 flex-grow"
             >
               <div className="flex items-center justify-center w-12 h-12 bg-pink-300 rounded-md">
                 {statistic.icon}
@@ -101,7 +101,7 @@ const Dashboard = () => {
                   onClick={() => {
                     navigate(`/blog/${blog._id}`);
                   }}
-                  className="flex flex-col gap-y-1 sm:flex-row sm:justify-between sm:items-center cursor-pointer dark:bg-gray-700 bg-gray-100 px-3 py-1.5 rounded-md"
+                  className="flex flex-col gap-y-1 sm:flex-row sm:justify-between sm:items-center cursor-pointer dark:bg-gray-800 bg-gray-100 px-3 py-1.5 rounded-md"
                 >
                   <div className="flex flex-col">
                     <p className="text-base dark:text-white text-darkBlue font-medium">

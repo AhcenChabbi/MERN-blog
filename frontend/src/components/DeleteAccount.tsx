@@ -11,7 +11,7 @@ const DeleteAccount = () => {
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-      className="dark:bg-gray-700 bg-white rounded-xl shadow p-4"
+      className="dark:bg-gray-800 bg-white rounded-xl shadow p-4"
     >
       <h2 className="text-xl font-normal text-red-500">Delete Account</h2>
       <p className="dark:text-white text-darkBlue text-base font-normal my-3">
