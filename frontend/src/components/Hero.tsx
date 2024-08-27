@@ -1,4 +1,4 @@
-import { BlogName } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 
 const Hero = () => {
   return (

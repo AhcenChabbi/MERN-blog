@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { z } from "zod";
-import { updateUserPasswordSchema } from "../constants/constants";
+import { updateUserPasswordSchema } from "../constants/Schemas";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateUserPassword } from "../hooks/mutations/mutations";

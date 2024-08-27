@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BlogName } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 import { FaMoon } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { FaSun } from "react-icons/fa";

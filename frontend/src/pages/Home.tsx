@@ -1,7 +1,8 @@
 import { BlogsList, Hero } from "../components";
 import { motion } from "framer-motion";
-import { BlogName, variants } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 import { useEffect } from "react";
+import { variants } from "../constants/AnimationVariants";
 const Home = () => {
   useEffect(() => {
     document.title = "Home | " + BlogName;

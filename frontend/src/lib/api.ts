@@ -1,12 +1,12 @@
 import { z } from "zod";
 import API from "../config/apiClient";
 import {
-  IBlog,
+  blogSchema,
   loginSchema,
   signUpSchema,
   updateUserPasswordSchema,
   UpdateUserSchema,
-} from "../constants/constants";
+} from "../constants/Schemas";
 import { Blog, User } from "../constants";
 type loginCredentials = z.infer<typeof loginSchema>;
 
@@ -46,7 +46,8 @@ export const updatePassword = async (
 export const deleteAccount = async () => API.delete("/user");
 
 // Blog
-export const createBlog = async (data: IBlog) => API.post<Blog>("/blog", data);
+type TBlog = z.infer<typeof blogSchema>;
+export const createBlog = async (data: TBlog) => API.post<Blog>("/blog", data);
 type blogsPagination = {
   blogs: Blog[];
   totalPages: number;
@@ -95,7 +96,7 @@ export const getUserAndUserBlogs = async (username: string) =>
 
 export type UpdateBlogParams = {
   blogId: string;
-  data: Partial<IBlog>;
+  data: Partial<TBlog>;
 };
 export const updateBlog = async ({ blogId, data }: UpdateBlogParams) =>
   API.patch<Blog>(`/blog/${blogId}`, data);

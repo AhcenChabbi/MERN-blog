@@ -10,8 +10,8 @@ import { useDeleteBlog } from "../hooks/mutations/mutations";
 import { Link } from "react-router-dom";
 import { navigate } from "../lib/navigation";
 import { motion } from "framer-motion";
-import { variants } from "../constants/constants";
 import { useEffect } from "react";
+import { variants } from "../constants/AnimationVariants";
 
 const Dashboard = () => {
   const { user } = useAuth() as { user: User };

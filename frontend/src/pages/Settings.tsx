@@ -1,7 +1,7 @@
 import { BasicInfo, ChangePassword, DeleteAccount } from "../components";
 import { motion } from "framer-motion";
-import { variants } from "../constants/constants";
 import { useEffect } from "react";
+import { variants } from "../constants/AnimationVariants";
 const Settings = () => {
   useEffect(() => {
     document.title = "Settings";

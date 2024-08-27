@@ -6,7 +6,7 @@ import { z } from "zod";
 import { sendPasswordResetEmail } from "../lib/api";
 import toast from "react-hot-toast";
 import { Spinner } from "../components";
-import { emailSchema } from "../constants/constants";
+import { emailSchema } from "../constants/Schemas";
 
 const schema = z.object({
   email: emailSchema,

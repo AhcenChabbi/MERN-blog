@@ -1,4 +1,3 @@
-import { Variants } from "framer-motion";
 import { z } from "zod";
 // zod validation schema
 export const emailSchema = z.string().email({ message: "Email not valid" });
@@ -66,25 +65,4 @@ export const blogSchema = z.object({
     .min(10, { message: "Content must be at least 10 characters" })
     .max(5000, { message: "Content must be at most 5000 characters" }),
 });
-
-//other constants
-export type IBlog = z.infer<typeof blogSchema>;
-
 export const BlogName = "DevLog";
-export const variants: Variants = {
-  initial: {
-    opacity: 0,
-    y: -20,
-    transition: { duration: 0.5, type: "spring" },
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, type: "spring" },
-  },
-  exit: {
-    y: 20,
-    opacity: 0,
-    transition: { duration: 0.3, type: "spring" },
-  },
-};

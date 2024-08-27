@@ -41,6 +41,7 @@ const Profile = () => {
   const { mutate: signOut } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [AUTH] });
       queryClient.removeQueries({ queryKey: [AUTH] });
       toast.success("Logout successful");
     },

@@ -4,8 +4,9 @@ import { AuthorBlogCard, Error, Spinner, UserDetail } from "../components";
 import { useGetCurrentUserBlogs } from "../hooks/queries/useBlogs";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { variants, BlogName } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 import { motion } from "framer-motion";
+import { variants } from "../constants/AnimationVariants";
 const MyProfile = () => {
   const { user } = useAuth() as { user: User };
   useEffect(() => {

@@ -9,14 +9,15 @@ import Highlight from "react-highlight";
 import { IoClose } from "react-icons/io5";
 import AuthorBlogs from "./AuthorBlogs";
 import { useEffect, useRef } from "react";
-import { useLocalStorage, VISITED_BlOGS_KEY } from "../utils/useLocalStorage";
+import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
 import { motion } from "framer-motion";
-import { BlogName, variants } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 import {
   useBookmarkBlog,
   useIncrementTotalVisit,
   useLikeBlog,
 } from "../hooks/mutations/mutations";
+import { variants } from "../constants/AnimationVariants";
 const BlogDetail = ({
   blog: {
     author: {

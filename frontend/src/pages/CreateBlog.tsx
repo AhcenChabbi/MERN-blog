@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { CreateBlogForm } from "../components";
-import { BlogName } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 
 const CreateBlog = () => {
   useEffect(() => {

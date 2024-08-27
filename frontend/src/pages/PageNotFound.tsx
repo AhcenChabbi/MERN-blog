@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { BlogName } from "../constants/constants";
+import { BlogName } from "../constants/Schemas";
 const PageNotFound = () => {
   useEffect(() => {
     document.title = "Page Not Found | " + BlogName;

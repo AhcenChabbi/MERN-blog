@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { loginSchema } from "../constants/constants";
+import { loginSchema } from "../constants/Schemas";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../lib/api";
 import toast from "react-hot-toast";

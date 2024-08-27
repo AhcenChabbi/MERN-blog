@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { passwordSchema } from "../constants/constants";
+import { passwordSchema } from "../constants/Schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";

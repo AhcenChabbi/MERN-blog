@@ -5,8 +5,7 @@ import { useReadingList } from "../hooks/queries/useBlogs";
 import { AuthorBlogCard, Error, PaginationBar, Spinner } from "../components";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { variants } from "../constants/constants";
-
+import { variants } from "../constants/AnimationVariants";
 const ReadingList = () => {
   const { user } = useAuth() as { user: User };
   useEffect(() => {

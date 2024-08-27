@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { motion, Variants } from "framer-motion";
 import { z } from "zod";
-import { UpdateUserSchema } from "../constants/constants";
+import { UpdateUserSchema } from "../constants/Schemas";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { convertBase64, getModifiedData, isEmptyObject } from "../utils";

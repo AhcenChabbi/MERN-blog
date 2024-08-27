@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { blogSchema } from "../constants/constants";
+import { blogSchema } from "../constants/Schemas";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuUploadCloud } from "react-icons/lu";
