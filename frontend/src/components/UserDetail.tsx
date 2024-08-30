@@ -2,9 +2,8 @@ import { FaRegNewspaper } from "react-icons/fa6";
 import { User } from "../constants";
 import { FaCalendarAlt } from "react-icons/fa";
 import { formatDate } from "../utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MdCreate } from "react-icons/md";
-import { useAuth } from "../hooks/queries/useAuth";
 import { motion } from "framer-motion";
 const UserDetail = ({
   user,
@@ -14,8 +13,8 @@ const UserDetail = ({
     "username" | "bio" | "profile" | "createdAt" | "blogPublished" | "_id"
   >;
 }) => {
-  const { user: currentUser } = useAuth();
-  const isEditProfileHidden = !currentUser || currentUser._id !== user._id;
+  const location = useLocation();
+  const isEditProfileHidden = location.pathname !== "/profile";
   return (
     <motion.div
       initial={{ opacity: 0 }}

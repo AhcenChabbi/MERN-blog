@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { verifyEmail } from "../lib/api";
 import { FaCheckCircle } from "react-icons/fa";
-import { Spinner } from "../components";
+import { SEO, Spinner } from "../components";
 import { useAuth } from "../hooks/queries/useAuth";
 import { error, partyPopper } from "../assets";
 import { MdError } from "react-icons/md";
@@ -16,6 +16,7 @@ const EmailVerification = () => {
   const { user } = useAuth();
   return (
     <div className="flex-grow flex justify-center items-center">
+      <SEO title="Email Verification" description="Email Verification" />
       {isLoading ? (
         <Spinner size={10} />
       ) : (

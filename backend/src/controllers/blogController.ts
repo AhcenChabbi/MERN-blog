@@ -77,22 +77,22 @@ export const getReadingListHandler = catchErrors(async (req, res) => {
     .skip(skip)
     .limit(limit)
     .populate(authorFieldsProjection)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
   res.status(OK).json({
-    blogs: blogs.map((blog) => blog.toObject()),
+    blogs,
     totalPages: Math.ceil(totalBookmarkedBlogs / limit),
   });
 });
 
 export const getMyBlogsHandler = catchErrors(async (req, res) => {
   const { userId } = req;
-  const userBlogs = await blogModel
+  const blogs = await blogModel
     .find({ author: userId })
     .populate(authorFieldsProjection)
-    .sort({ createdAt: -1 });
-  return res.status(OK).json({
-    blogs: userBlogs.map((blog) => blog.toObject()),
-  });
+    .sort({ createdAt: -1 })
+    .lean();
+  return res.status(OK).json(blogs);
 });
 
 export const deleteBlogHandler = catchErrors(async (req, res) => {

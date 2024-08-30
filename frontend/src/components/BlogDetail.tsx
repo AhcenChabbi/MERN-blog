@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Blog } from "../constants";
 import { formatDate } from "../utils";
 import { useAuth } from "../hooks/queries/useAuth";
@@ -11,13 +11,15 @@ import AuthorBlogs from "./AuthorBlogs";
 import { useEffect, useRef } from "react";
 import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
 import { motion } from "framer-motion";
-import { BlogName } from "../constants/Schemas";
 import {
   useBookmarkBlog,
   useIncrementTotalVisit,
   useLikeBlog,
 } from "../hooks/mutations/mutations";
 import { variants } from "../constants/AnimationVariants";
+import SEO from "./SEO";
+import { BlogName } from "../constants/Schemas";
+import { htmlToText } from "html-to-text";
 const BlogDetail = ({
   blog: {
     author: {
@@ -45,10 +47,6 @@ const BlogDetail = ({
   const hasBookmarked = user && user.bookmarkedBlogs.includes(blogId);
   const userProfileRoute = isCurrentUserAuthor ? "/profile" : `/${username}`;
 
-  useEffect(() => {
-    document.title = title + " | " + BlogName;
-  }, [title]);
-
   const { mutate: likeBlogHandler } = useLikeBlog();
 
   const { mutate: bookMarkBlogHandler } = useBookmarkBlog();
@@ -75,6 +73,8 @@ const BlogDetail = ({
   const showModal = () => {
     dialogRef?.current?.showModal();
   };
+  const { pathname } = useLocation();
+  const currentLocation = window.location.origin + pathname;
   return (
     <>
       <motion.div
@@ -84,11 +84,23 @@ const BlogDetail = ({
         exit="exit"
         className="flex-grow space-y-4 px-2.5"
       >
+        <SEO
+          title={`${title} | ${BlogName}`}
+          description={htmlToText(content)}
+          ogTitle={`${title} | ${BlogName}`}
+          ogDescription={htmlToText(content)}
+          ogType="article"
+          ogImage={url}
+          ogUrl={currentLocation}
+          canonical={currentLocation}
+        />
         <div className="flex flex-col gap-y-2.5">
           <img
             src={url}
             alt={title + "banner"}
             className="rounded-xl w-full max-h-80 object-cover"
+            title={title}
+            loading="lazy"
           />
           <div className="w-full flex items-center justify-between">
             <div className="flex items-center gap-x-2.5">
@@ -97,6 +109,8 @@ const BlogDetail = ({
                   className="rounded-full size-9 object-cover"
                   src={authorProfile}
                   alt="author profile"
+                  title={username}
+                  loading="lazy"
                 />
               </Link>
               <div>
@@ -196,7 +210,7 @@ const Modal = ({
     >
       <div className="space-y-2.5 shadow bg-white dark:bg-gray-700 p-5 rounded-xl">
         <header className="flex items-center justify-between dark:text-white text-darkBlue">
-          <h1 className="text-xl font-normal">Login to continue</h1>
+          <h2 className="text-xl font-normal">Login to continue</h2>
           <button onClick={closeModal}>
             <IoClose className="text-2xl" />
           </button>

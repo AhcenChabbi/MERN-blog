@@ -8,7 +8,6 @@ import {
 } from "../../lib/api";
 
 export const allBlogs = "Blogs";
-
 export function useGetBlogs(page: number, limit: number) {
   return useQuery({
     queryFn: () => getBlogs(page, limit),
@@ -18,14 +17,12 @@ export function useGetBlogs(page: number, limit: number) {
 }
 
 export const blog = "blog";
-
 export const useGetBlogById = (blogId: string) => {
   return useQuery({
     queryFn: () => getBlogbyId(blogId),
     queryKey: [blog, blogId],
   });
 };
-
 export const readinglist = "readingList";
 export const useReadingList = (
   blogIds: string[],
@@ -38,7 +35,6 @@ export const useReadingList = (
     placeholderData: keepPreviousData,
   });
 };
-
 export const currentUserBlogs = "currentUserBlogs";
 export const useGetCurrentUserBlogs = () => {
   return useQuery({

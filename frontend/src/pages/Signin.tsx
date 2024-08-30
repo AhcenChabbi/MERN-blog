@@ -8,7 +8,7 @@ import { login } from "../lib/api";
 import toast from "react-hot-toast";
 import { AUTH } from "../hooks/queries/useAuth";
 import queryClient from "../config/queryClient";
-import { Spinner } from "../components";
+import { SEO, Spinner } from "../components";
 
 type FormFields = z.infer<typeof loginSchema>;
 const Signin = () => {
@@ -37,6 +37,7 @@ const Signin = () => {
   });
   return (
     <div className="flex items-center justify-center flex-grow">
+      <SEO title="Signin" description="Signin" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="form sm:p-6 md:p-8 space-y-4 p-4"

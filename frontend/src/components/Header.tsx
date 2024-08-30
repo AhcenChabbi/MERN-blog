@@ -4,7 +4,7 @@ import { FaMoon } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { FaSun } from "react-icons/fa";
 import { toggleTheme } from "../app/themeSlice";
-import Profile from "./Profile";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Header = () => {
   const { theme } = useAppSelector((state) => state.theme);
@@ -19,6 +19,8 @@ const Header = () => {
       </Link>
       <div className="flex items-center gap-3">
         <button
+          role="button"
+          name="theme"
           className="rounded-lg p-3 dark:hover:bg-gray-800 hover:bg-gray-200 transition-colors duration-300"
           onClick={() => {
             dispatch(toggleTheme());
@@ -29,8 +31,9 @@ const Header = () => {
           ) : (
             <FaMoon className="dark:text-white  text-darkBlue text-lg" />
           )}
+          <span className="sr-only"> Toggle Theme</span>
         </button>
-        <Profile />
+        <ProfileDropdown />
       </div>
     </nav>
   );

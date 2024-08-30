@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { BlogName } from "../constants/Schemas";
+import { SEO } from "../components";
 const PageNotFound = () => {
-  useEffect(() => {
-    document.title = "Page Not Found | " + BlogName;
-  });
   return (
     <div className="flex flex-col justify-center items-center flex-grow">
+      <SEO title="Page Not Found" description="Page Not Found" />
       <motion.div
         initial={{ opacity: 0, scale: 0.5, y: -50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

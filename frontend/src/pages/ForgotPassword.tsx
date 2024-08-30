@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import { sendPasswordResetEmail } from "../lib/api";
 import toast from "react-hot-toast";
-import { Spinner } from "../components";
+import { SEO, Spinner } from "../components";
 import { emailSchema } from "../constants/Schemas";
 
 const schema = z.object({
@@ -37,6 +37,7 @@ const ForgotPassword = () => {
   };
   return (
     <div className="flex items-center justify-center flex-grow">
+      <SEO title="Forgot Password" description="Forgot Password" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="form sm:p-6 md:p-8 space-y-4 p-4"

@@ -33,7 +33,6 @@ export const useDeleteBlog = () => {
     },
   });
 };
-
 export const useUpdateUser = () => {
   return useMutation({
     mutationFn: updateUser,
@@ -46,7 +45,6 @@ export const useUpdateUser = () => {
     },
   });
 };
-
 export const useUpdateUserPassword = () => {
   return useMutation({
     mutationFn: updatePassword,
@@ -60,7 +58,6 @@ export const useUpdateUserPassword = () => {
     },
   });
 };
-
 const onSuccess = (data: BlogReaction, blogId: string) => {
   queryClient.setQueryData([blog, blogId], (oldData: BlogReaction) => {
     return {
@@ -70,7 +67,6 @@ const onSuccess = (data: BlogReaction, blogId: string) => {
   });
   queryClient.setQueryData([AUTH], data.user);
 };
-
 export const useLikeBlog = () => {
   return useMutation({
     mutationFn: likeBlog,
@@ -79,7 +75,6 @@ export const useLikeBlog = () => {
     },
   });
 };
-
 export const useBookmarkBlog = () => {
   return useMutation({
     mutationFn: bookMarkBlog,
@@ -88,7 +83,6 @@ export const useBookmarkBlog = () => {
     },
   });
 };
-
 export const useIncrementTotalVisit = (onSuccess: (data: string) => void) => {
   return useMutation({
     mutationFn: incrementBlogTotalVisit,
@@ -97,7 +91,6 @@ export const useIncrementTotalVisit = (onSuccess: (data: string) => void) => {
     },
   });
 };
-
 export const useCreateBlog = () => {
   return useMutation({
     mutationFn: createBlog,
@@ -111,7 +104,6 @@ export const useCreateBlog = () => {
     },
   });
 };
-
 export const useDeleteAccount = () => {
   return useMutation({
     mutationFn: deleteAccount,
@@ -125,7 +117,6 @@ export const useDeleteAccount = () => {
     },
   });
 };
-
 export const useUpdateBlog = () => {
   return useMutation({
     mutationFn: updateBlog,

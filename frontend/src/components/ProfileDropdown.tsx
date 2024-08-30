@@ -29,7 +29,7 @@ const navLinks = [
     icon: <IoSettingsOutline />,
   },
 ];
-const Profile = () => {
+const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => {
     setIsOpen((prev) => !prev);
@@ -55,15 +55,15 @@ const Profile = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !event.composedPath().includes(dropdownRef.current)
       ) {
         closeDropdown();
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [dropdownRef]);
   return isLoading ? (
@@ -83,6 +83,8 @@ const Profile = () => {
           src={user.profile.url}
           alt="user profile"
           className="size-10 cursor-pointer border-2 border-darkBlue dark:border-blue-600 rounded-full object-cover"
+          title={user.username}
+          loading="lazy"
         />
         <AnimatePresence>
           {isOpen && (
@@ -105,6 +107,8 @@ const Profile = () => {
                   src={user.profile.url}
                   alt="user profile"
                   className="size-10 cursor-pointer border-2 border-darkBlue dark:border-blue-600 rounded-full object-cover"
+                  title={user.username}
+                  loading="lazy"
                 />
                 <div className="font-medium">@{user.username}</div>
               </Link>
@@ -161,4 +165,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileDropdown;

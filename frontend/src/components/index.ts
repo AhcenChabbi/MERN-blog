@@ -1,30 +1,39 @@
+import { lazy } from "react";
 import AppContainer from "./AppContainer";
 import Header from "./Header";
-import Hero from "./Hero";
-import Profile from "./Profile";
-import ResetPasswordForm from "./ResetPasswordForm";
+const Hero = lazy(() => import("./Hero"));
+import ProfileDropdown from "./ProfileDropdown";
+const ResetPasswordForm = lazy(() => import("./ResetPasswordForm"));
 import Spinner from "./Spinner";
 import ThemeProvider from "./ThemeProvider";
 import BlogCard from "./BlogCard";
-import BlogsList from "./BlogsList";
-import CreateBlogForm from "./CreateBlogForm";
-import BlogDetail from "./BlogDetail";
+const BlogsList = lazy(() => import("./BlogsList"));
+const CreateBlogForm = lazy(() => import("./CreateBlogForm"));
+const BlogDetail = lazy(() => import("./BlogDetail"));
 import TextEditor from "./TextEditor";
 import Toolbar from "./Toolbar";
 import AuthorBlogCard from "./AuthorBlogCard";
 import PaginationBar from "./PaginationBar";
-import UserDetail from "./UserDetail";
+const UserDetail = lazy(() => import("./UserDetail"));
 import Error from "./Error";
-import AnimatedRoutes from "./AnimatedRoutes";
-import BasicInfo from "./BasicInfo";
-import ChangePassword from "./ChangePassword";
-import DeleteAccount from "./DeleteAccount";
+import AnimatedRoutes from "../pages/AnimatedRoutes";
+const BasicInfo = lazy(() => import("./BasicInfo"));
+const ChangePassword = lazy(() => import("./ChangePassword"));
+const DeleteAccount = lazy(() => import("./DeleteAccount"));
+const UserBlogList = lazy(() => import("./UserBlogList"));
+import CenteredSpinner from "./CenteredSpinner";
+const ProfileLayout = lazy(() => import("./ProfileLayout"));
+import Statistics from "./Statistics";
+import DashboardBlogCard from "./DashboardBlogCard";
+const DashboardBlogList = lazy(() => import("./DashboardBlogList"));
+import SEO from "./SEO";
+import AuthRedirect from "./AuthRedirect";
 export {
   AppContainer,
   CreateBlogForm,
   Header,
   Hero,
-  Profile,
+  ProfileDropdown,
   ResetPasswordForm,
   Spinner,
   ThemeProvider,
@@ -41,4 +50,12 @@ export {
   BasicInfo,
   ChangePassword,
   DeleteAccount,
+  UserBlogList,
+  CenteredSpinner,
+  ProfileLayout,
+  Statistics,
+  DashboardBlogCard,
+  DashboardBlogList,
+  SEO,
+  AuthRedirect,
 };

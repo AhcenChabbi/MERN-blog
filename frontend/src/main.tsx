@@ -7,16 +7,19 @@ import store, { persistor } from "./app/store.ts";
 import ThemeProvider from "./components/ThemeProvider.tsx";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider>
-        <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
+        <HelmetProvider>
           <BrowserRouter>
-            <App />
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
           </BrowserRouter>
-        </PersistGate>
-      </ThemeProvider>
+        </HelmetProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

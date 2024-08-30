@@ -1,7 +1,8 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { MdError } from "react-icons/md";
-import { ResetPasswordForm } from "../components";
+import { CenteredSpinner, ResetPasswordForm, SEO } from "../components";
 import { error } from "../assets";
+import { Suspense } from "react";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -11,8 +12,11 @@ const ResetPassword = () => {
   const linkIsValid = code && exp && exp > now;
   return (
     <div className="flex justify-center items-center flex-grow">
+      <SEO title="Reset Password" description="Reset Password" />
       {linkIsValid ? (
-        <ResetPasswordForm code={code} />
+        <Suspense fallback={<CenteredSpinner />}>
+          <ResetPasswordForm code={code} />
+        </Suspense>
       ) : (
         <div className="space-y-3 p-5 dark:bg-gray-800 bg-white shadow rounded-xl border border-gray-200 dark:border-gray-700 ">
           <h1 className="text-2xl dark:text-white text-darkBlue font-semibold">

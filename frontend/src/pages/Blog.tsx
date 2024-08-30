@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useGetBlogById } from "../hooks/queries/useBlogs";
-import { BlogDetail, Error, Spinner } from "../components";
+import { BlogDetail, CenteredSpinner, Error } from "../components";
+import { Suspense } from "react";
 
 const Blog = () => {
   const { blogId } = useParams();
@@ -9,11 +10,13 @@ const Blog = () => {
   return (
     <div className="pt-5 flex-grow flex mx-auto w-full max-w-3xl ">
       {isPending ? (
-        <Spinner size={10} />
+        <CenteredSpinner />
       ) : isError ? (
         <Error message={error.message} />
       ) : (
-        <BlogDetail blog={data.blog} authorBlogs={data.authorBlogs} />
+        <Suspense fallback={<CenteredSpinner />}>
+          <BlogDetail blog={data.blog} authorBlogs={data.authorBlogs} />
+        </Suspense>
       )}
     </div>
   );

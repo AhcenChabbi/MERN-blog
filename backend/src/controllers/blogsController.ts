@@ -11,14 +11,15 @@ export const getAllBlogsHandler = catchErrors(async (req, res) => {
   const limit = parseInt(req.query.limit as string) || 9;
   const skip = (page - 1) * limit;
   const totalBlogs = await blogModel.countDocuments();
-  const latestBlogs = await blogModel
+  const blogs = await blogModel
     .find()
     .skip(skip)
     .limit(limit)
     .populate(authorFieldsProjection)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
   return res.status(OK).json({
-    blogs: latestBlogs.map((blog) => blog.toObject()),
+    blogs,
     totalPages: Math.ceil(totalBlogs / limit),
   });
 });
@@ -32,17 +33,19 @@ export const getBlogByIdHandler = catchErrors(async (req, res) => {
   );
   const blog = await blogModel
     .findById(blogId)
-    .populate(authorFieldsProjection);
+    .populate(authorFieldsProjection)
+    .lean();
   appAssert(blog, NOT_FOUND, "Blog not found");
   const authorBlogs = await blogModel
     .find({ author: blog.author, _id: { $ne: blogId } })
     .populate(authorFieldsProjection)
     .sort({ createdAt: "descending" })
-    .limit(3);
+    .limit(3)
+    .lean();
 
   res.status(OK).json({
-    blog: blog.toObject(),
-    authorBlogs: authorBlogs.map((authorBlog) => authorBlog.toObject()),
+    blog,
+    authorBlogs,
   });
 });
 
@@ -70,12 +73,13 @@ export const getUserAndUserBlogs = catchErrors(async (req, res) => {
     .findOne({ username })
     .select("username profile _id bio createdAt blogPublished");
   appAssert(user, NOT_FOUND, "User not found");
-  const userBlogs = await blogModel
+  const blogs = await blogModel
     .find({ author: user._id })
     .populate(authorFieldsProjection)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
   return res.status(OK).json({
-    blogs: userBlogs.map((blog) => blog.toObject()),
-    user: user,
+    blogs,
+    user,
   });
 });

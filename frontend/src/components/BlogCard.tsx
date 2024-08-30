@@ -26,6 +26,8 @@ const BlogCard = ({
         src={url}
         alt="blog banner"
         className="object-cover max-h-36 w-full"
+        title={title}
+        loading="lazy"
       />
       <div className="space-y-2 divide-y divide-gray-200 dark:divide-gray-600">
         <div className="p-3 space-y-3">
@@ -35,6 +37,8 @@ const BlogCard = ({
                 className="rounded-full size-8 object-cover"
                 src={authorProfile}
                 alt="author profile"
+                title={username}
+                loading="lazy"
               />
               <div className="text-sm font-normal ">
                 <p className="font-medium text-gray-800 dark:text-gray-300">
@@ -49,9 +53,9 @@ const BlogCard = ({
               {readingTime} min read
             </p>
           </div>
-          <h1 className="text-gray-800 dark:text-white text-lg font-normal">
+          <h2 className="text-gray-800 dark:text-white text-lg font-normal">
             {title}
-          </h1>
+          </h2>
         </div>
         <div className="flex items-center gap-2 text-base font-normal text-gray-800 dark:text-gray-400 p-2 flex-wrap">
           <div className="flex items-center gap-2 min-w-fit">

@@ -76,10 +76,7 @@ export const getReadingList = async (blogIds: string[], page = 1, limit = 9) =>
 export const incrementBlogTotalVisit = async (blogId: string) =>
   API.post<string>(`/blogs/${blogId}/visit`);
 
-export type BlogDashboard = {
-  blogs: Blog[];
-};
-export const getCurrentUserBlogs = async () => API.get<BlogDashboard>(`/blog`);
+export const getCurrentUserBlogs = async () => API.get<Blog[]>(`/blog`);
 
 export const deleteBlog = async (blogId: string) =>
   API.delete<{ user: User }>(`/blog/${blogId}`);

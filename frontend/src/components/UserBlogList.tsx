@@ -1,0 +1,39 @@
+import { Link, useLocation } from "react-router-dom";
+import { userAndUserBlogs } from "../lib/api";
+import AuthorBlogCard from "./AuthorBlogCard";
+import { motion } from "framer-motion";
+const UserBlogList = ({ blogs, user }: userAndUserBlogs) => {
+  const location = useLocation();
+  const inProfilePage = location.pathname === "/profile";
+  return blogs.length > 0 ? (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+      className="flex flex-col gap-y-2 flex-grow"
+    >
+      <h1 className="dark:text-white text-darkBlue font-medium text-xl">
+        {inProfilePage ? "Your" : user?.username + "'s"} blogs:
+      </h1>
+      <div className="flex flex-col gap-y-2 flex-grow">
+        {blogs.map((blog) => (
+          <AuthorBlogCard key={blog._id} {...blog} />
+        ))}
+      </div>
+    </motion.div>
+  ) : (
+    <div className="flex flex-col gap-y-1 items-center justify-center flex-grow">
+      <h1 className="dark:text-white text-darkBlue font-medium text-lg">
+        {inProfilePage ? "You haven't" : user?.username + " hasn't"} created any
+        blog yet
+      </h1>
+      {inProfilePage && (
+        <Link to="/createblog" className="link">
+          Create Blog
+        </Link>
+      )}
+    </div>
+  );
+};
+
+export default UserBlogList;

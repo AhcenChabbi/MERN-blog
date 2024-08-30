@@ -1,12 +1,9 @@
-import { BlogsList, Hero } from "../components";
+import { BlogsList, CenteredSpinner, Hero, SEO } from "../components";
 import { motion } from "framer-motion";
-import { BlogName } from "../constants/Schemas";
-import { useEffect } from "react";
 import { variants } from "../constants/AnimationVariants";
+import { BlogName } from "../constants/Schemas";
+import { Suspense } from "react";
 const Home = () => {
-  useEffect(() => {
-    document.title = "Home | " + BlogName;
-  });
   return (
     <motion.div
       variants={variants}
@@ -15,8 +12,14 @@ const Home = () => {
       exit="exit"
       className="py-5 px-6 lg:px-12 flex-grow flex flex-col gap-y-4"
     >
-      <Hero />
-      <BlogsList />
+      <SEO
+        title={`Home | ${BlogName}`}
+        description="Here you'll find a variety of articles and tutorials on topics such as web development, software engineering, and programming languages."
+      />
+      <Suspense fallback={<CenteredSpinner />}>
+        <Hero />
+        <BlogsList />
+      </Suspense>
     </motion.div>
   );
 };
