@@ -46,7 +46,7 @@ const BasicInfo = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
     setValue,
     watch,
   } = useForm<FormFields>({

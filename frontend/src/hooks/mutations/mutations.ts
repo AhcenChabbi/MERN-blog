@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import {
-  BlogDashboard,
   BlogReaction,
   bookMarkBlog,
   createBlog,
@@ -8,6 +7,7 @@ import {
   deleteBlog,
   incrementBlogTotalVisit,
   likeBlog,
+  logout,
   updateBlog,
   updatePassword,
   updateUser,
@@ -17,15 +17,17 @@ import queryClient from "../../config/queryClient";
 import toast from "react-hot-toast";
 import { AUTH } from "../queries/useAuth";
 import { navigate } from "../../lib/navigation";
+import { Blog } from "../../constants";
 
 export const useDeleteBlog = () => {
   return useMutation({
     mutationFn: deleteBlog,
     onSuccess: (data, blogId) => {
       toast.success("Blog Deleted");
-      queryClient.setQueryData([currentUserBlogs], (oldData: BlogDashboard) => {
-        return { blogs: oldData.blogs.filter((blog) => blog._id !== blogId) };
+      queryClient.setQueryData([currentUserBlogs], (oldData: Blog[]) => {
+        return oldData.filter((blog) => blog._id !== blogId);
       });
+      queryClient.invalidateQueries({ queryKey: [allBlogs] });
       queryClient.setQueryData([AUTH], data.user);
     },
     onError: () => {
@@ -97,6 +99,7 @@ export const useCreateBlog = () => {
     onSuccess: (data) => {
       toast.success("Blog created successfully");
       queryClient.invalidateQueries({ queryKey: [allBlogs] });
+      queryClient.invalidateQueries({ queryKey: [currentUserBlogs] });
       navigate(`/blog/${data._id}`);
     },
     onError: () => {
@@ -129,6 +132,20 @@ export const useUpdateBlog = () => {
     },
     onError: () => {
       toast.error("An error occured please try again");
+    },
+  });
+};
+
+export const useLogout = () => {
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [AUTH] });
+      queryClient.removeQueries({ queryKey: [AUTH] });
+      toast.success("Logout successful");
+    },
+    onError: () => {
+      toast.error("Logout failed. Please try again.");
     },
   });
 };

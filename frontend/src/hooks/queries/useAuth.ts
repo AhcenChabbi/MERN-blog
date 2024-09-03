@@ -7,6 +7,9 @@ export const useAuth = () => {
     queryKey: [AUTH],
     queryFn: getUser,
     staleTime: Infinity,
+    retry: 0,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   return { user, ...rest };
 };

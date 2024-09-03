@@ -1,10 +1,10 @@
 import { useGetBlogs } from "../hooks/queries/useBlogs";
-import BlogCard from "./BlogCard";
-import Spinner from "./Spinner";
 import { useState } from "react";
 import PaginationBar from "./PaginationBar";
 import { Link } from "react-router-dom";
 import Error from "./Error";
+import CenteredSpinner from "./CenteredSpinner";
+import BlogListGrid from "./BlogListGrid";
 
 const BlogsList = () => {
   const [page, setPage] = useState(1);
@@ -12,18 +12,12 @@ const BlogsList = () => {
   return (
     <div className="flex-grow flex flex-col">
       {isPending ? (
-        <div className="flex flex-grow justify-center items-center">
-          <Spinner size={10} />
-        </div>
+        <CenteredSpinner />
       ) : isError ? (
         <Error />
       ) : data.blogs.length ? (
         <div className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-            {data.blogs.map((blog) => (
-              <BlogCard key={blog._id} {...blog} />
-            ))}
-          </div>
+          <BlogListGrid blogs={data.blogs} />
           <PaginationBar
             decrement={() => {
               setPage((prev) => Math.max(prev - 1, 1));

@@ -1,25 +1,21 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Blog } from "../constants";
 import { formatDate } from "../utils";
 import { useAuth } from "../hooks/queries/useAuth";
 import { MdCreate } from "react-icons/md";
-import { FaHeart } from "react-icons/fa";
-import { IoBookmark } from "react-icons/io5";
 import Highlight from "react-highlight";
-import { IoClose } from "react-icons/io5";
 import AuthorBlogs from "./AuthorBlogs";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
 import { motion } from "framer-motion";
-import {
-  useBookmarkBlog,
-  useIncrementTotalVisit,
-  useLikeBlog,
-} from "../hooks/mutations/mutations";
+import { useIncrementTotalVisit } from "../hooks/mutations/mutations";
 import { variants } from "../constants/AnimationVariants";
 import SEO from "./SEO";
 import { BlogName } from "../constants/Schemas";
 import { htmlToText } from "html-to-text";
+import { useGetPageUrl } from "../hooks/useGetPageUrl";
+import LikeAndBookmarkBlog from "./LikeAndBookmarkBlog";
+import LoginSignUpModal from "./LoginOrSignUpModal";
 const BlogDetail = ({
   blog: {
     author: {
@@ -43,13 +39,7 @@ const BlogDetail = ({
   const { user } = useAuth();
 
   const isCurrentUserAuthor = user && user.username === username;
-  const hasLiked = user && user.likedBlogs.includes(blogId);
-  const hasBookmarked = user && user.bookmarkedBlogs.includes(blogId);
   const userProfileRoute = isCurrentUserAuthor ? "/profile" : `/${username}`;
-
-  const { mutate: likeBlogHandler } = useLikeBlog();
-
-  const { mutate: bookMarkBlogHandler } = useBookmarkBlog();
 
   const { storedValue, setItem } = useLocalStorage<string[]>(
     VISITED_BlOGS_KEY,
@@ -70,11 +60,10 @@ const BlogDetail = ({
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const showModal = () => {
-    dialogRef?.current?.showModal();
-  };
-  const { pathname } = useLocation();
-  const currentLocation = window.location.origin + pathname;
+  const showModal = useCallback(() => {
+    dialogRef.current?.showModal();
+  }, []);
+  const currentLocation = useGetPageUrl();
   return (
     <>
       <motion.div
@@ -153,91 +142,17 @@ const BlogDetail = ({
             {content}
           </Highlight>
 
-          <div className="mx-auto w-full max-w-xs bg-white border border-gray-200 rounded-full shadow dark:bg-gray-800 dark:border-gray-700 py-2.5 flex items-center justify-center gap-x-3 mt-2.5 flex-wrap gap-y-2">
-            <div className="flex items-center gap-2.5 dark:text-white text-darkBlue min-w-fit">
-              <button
-                onClick={() => {
-                  if (user) {
-                    likeBlogHandler(blogId);
-                  } else {
-                    showModal();
-                  }
-                }}
-                className="dark:bg-gray-700 bg-gray-100 rounded-full p-2 flex items-center justify-center"
-              >
-                <FaHeart className={`${hasLiked && "text-red-600"}`} />
-              </button>
-              <span>{totalReaction} Reactions</span>
-            </div>
-            <div className="flex items-center gap-2.5 dark:text-white text-darkBlue min-w-fit">
-              <button
-                onClick={() => {
-                  if (user) {
-                    bookMarkBlogHandler(blogId);
-                  } else {
-                    showModal();
-                  }
-                }}
-                className="dark:bg-gray-700 bg-gray-100 rounded-full p-2 flex items-center justify-center"
-              >
-                <IoBookmark
-                  className={`${hasBookmarked && "text-purple-600"} `}
-                />
-              </button>
-              <span>{totalBookmark} Bookmarks</span>
-            </div>
-          </div>
+          <LikeAndBookmarkBlog
+            blogId={blogId}
+            showModal={showModal}
+            totalBookmark={totalBookmark}
+            totalReaction={totalReaction}
+          />
         </div>
         <AuthorBlogs authorBlogs={authorBlogs} />
       </motion.div>
-      <Modal dialogRef={dialogRef} />
+      <LoginSignUpModal dialogRef={dialogRef} />
     </>
-  );
-};
-
-const Modal = ({
-  dialogRef,
-}: {
-  dialogRef: React.RefObject<HTMLDialogElement>;
-}) => {
-  const closeModal = () => {
-    dialogRef.current?.close();
-  };
-  return (
-    <dialog
-      ref={dialogRef}
-      className="backdrop:backdrop-blur-sm bg-transparent p-0 transition-[opacity,transform] duration-300  -translate-y-20 opacity-0 block [&:not([open])]:pointer-events-none [&[open]]:translate-y-0 [&[open]]:opacity-100"
-    >
-      <div className="space-y-2.5 shadow bg-white dark:bg-gray-700 p-5 rounded-xl">
-        <header className="flex items-center justify-between dark:text-white text-darkBlue">
-          <h2 className="text-xl font-normal">Login to continue</h2>
-          <button onClick={closeModal}>
-            <IoClose className="text-2xl" />
-          </button>
-        </header>
-        <p className="dark:text-white text-darkBlue text-base">
-          We're a place where coders share, stay up-to-date and grow their
-          careers.
-        </p>
-        <div className="w-full flex items-center justify-end gap-2 text-base font-medium">
-          <Link
-            state={{
-              redirectUrl: window.location.pathname,
-            }}
-            to="/signin"
-            className="dark:text-white text-blue-700"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 px-4 py-1.5 rounded-full dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Create account
-          </Link>
-        </div>
-      </div>
-    </dialog>
   );
 };
 

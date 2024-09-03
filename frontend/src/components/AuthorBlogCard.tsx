@@ -19,6 +19,8 @@ const AuthorBlogCard = (authorBlog: Blog) => {
                 className="rounded-full size-8 object-cover"
                 src={authorBlog.author.profile.url}
                 alt="author profile"
+                title={authorBlog.author.username}
+                loading="lazy"
               />
               <div className="text-sm font-normal ">
                 <p className="font-medium text-gray-800 dark:text-gray-300">
@@ -33,9 +35,9 @@ const AuthorBlogCard = (authorBlog: Blog) => {
               {authorBlog.readingTime} min read
             </p>
           </div>
-          <h1 className="text-gray-800 dark:text-white text-lg font-normal">
+          <h2 className="text-gray-800 dark:text-white text-lg font-normal">
             {authorBlog.title}
-          </h1>
+          </h2>
         </div>
         <div className="flex items-center gap-2 text-base font-normal text-gray-800 dark:text-gray-400 p-2 flex-wrap">
           <div className="flex items-center gap-2 min-w-fit">

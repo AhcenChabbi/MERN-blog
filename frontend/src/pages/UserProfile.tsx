@@ -3,8 +3,6 @@ import { useGetUserAndUserBlogs } from "../hooks/queries/useBlogs";
 import { CenteredSpinner, Error, ProfileLayout } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
-import { Suspense } from "react";
-
 const UserProfile = () => {
   const { username } = useParams();
   const { data, isPending, isError } = useGetUserAndUserBlogs(username || "");
@@ -21,9 +19,7 @@ const UserProfile = () => {
       ) : isError ? (
         <Error message="User not found" />
       ) : (
-        <Suspense fallback={<CenteredSpinner />}>
-          <ProfileLayout user={data.user} blogs={data.blogs} />
-        </Suspense>
+        <ProfileLayout user={data.user} blogs={data.blogs} />
       )}
     </motion.div>
   );

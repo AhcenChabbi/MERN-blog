@@ -3,13 +3,13 @@ import { User } from "../constants";
 import { useAuth } from "../hooks/queries/useAuth";
 import { useReadingList } from "../hooks/queries/useBlogs";
 import {
-  AuthorBlogCard,
   CenteredSpinner,
+  EmptyReadingList,
   Error,
   PaginationBar,
+  ReadingListBlogs,
   SEO,
 } from "../components";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
 const ReadingList = () => {
@@ -28,21 +28,17 @@ const ReadingList = () => {
       exit="exit"
       className="w-full flex-grow max-w-2xl flex mx-auto py-2 px-2.5"
     >
+      <SEO title="Reading List" description="Reading List" />
       {isPending ? (
         <CenteredSpinner />
       ) : isError ? (
         <Error />
       ) : data.blogs.length > 0 ? (
         <div className="flex flex-col gap-y-3 flex-grow">
-          <SEO title="Reading List" description="Reading List" />
           <h1 className="dark:text-white text-darkBlue font-medium text-2xl">
             Reading List:
           </h1>
-          <div className="flex flex-col gap-y-3">
-            {data.blogs.map((blog) => (
-              <AuthorBlogCard key={blog._id} {...blog} />
-            ))}
-          </div>
+          <ReadingListBlogs blogs={data.blogs} />
           <PaginationBar
             decrement={() => {
               setPage((prev) => Math.max(prev - 1, 1));
@@ -58,14 +54,7 @@ const ReadingList = () => {
           />
         </div>
       ) : (
-        <div className="w-full flex flex-col gap-y-2 text-center">
-          <p className="text-2xl font-semibold dark:text-white text-darkBlue">
-            Reading List is empty
-          </p>
-          <Link to="/" className="link">
-            Back to home
-          </Link>
-        </div>
+        <EmptyReadingList />
       )}
     </motion.div>
   );

@@ -15,13 +15,10 @@ const Settings = () => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex-grow space-y-3 w-full max-w-3xl mx-auto p-2.5"
+      className="flex-grow flex flex-col space-y-3 w-full max-w-3xl mx-auto p-2.5"
     >
       <SEO title="Settings" description="Settings" />
-      <h1 className="text-2xl fontm-medium dark:text-white text-darkBlue">
-        Settings
-      </h1>
-      <div className="space-y-2">
+      <div className="space-y-2 flex-grow">
         <Suspense fallback={<CenteredSpinner />}>
           <BasicInfo />
           <ChangePassword />

@@ -4,7 +4,6 @@ import { CenteredSpinner, Error, ProfileLayout } from "../components";
 import { useGetCurrentUserBlogs } from "../hooks/queries/useBlogs";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
-import { Suspense } from "react";
 const Profile = () => {
   const { user } = useAuth() as { user: User };
   const { data: blogs, isPending, isError } = useGetCurrentUserBlogs();
@@ -21,9 +20,7 @@ const Profile = () => {
       ) : isError ? (
         <Error />
       ) : (
-        <Suspense fallback={<CenteredSpinner />}>
-          <ProfileLayout user={user} blogs={blogs} />
-        </Suspense>
+        <ProfileLayout user={user} blogs={blogs} />
       )}
     </motion.div>
   );

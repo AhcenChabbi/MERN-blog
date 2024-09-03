@@ -10,6 +10,11 @@ const themePersistedReducer = persistReducer(themePersistConfig, themeReducer);
 const rootReducer = combineReducers({ theme: themePersistedReducer });
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      serializableCheck: false,
+    });
+  },
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

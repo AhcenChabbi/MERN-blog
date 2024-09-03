@@ -50,4 +50,4 @@ const PaginationBar = ({
     </div>
   );
 };
-export default React.memo(PaginationBar) as typeof PaginationBar;
+export default PaginationBar;

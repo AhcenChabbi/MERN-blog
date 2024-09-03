@@ -4,7 +4,7 @@ import AuthorBlogCard from "./AuthorBlogCard";
 const AuthorBlogs = ({ authorBlogs }: { authorBlogs: Blog[] }) => {
   return (
     authorBlogs.length > 0 && (
-      <div className="pb-5">
+      <div>
         <h1 className="text-2xl font-semibold mb-3 dark:text-white text-darkBlue">
           Read next:
         </h1>

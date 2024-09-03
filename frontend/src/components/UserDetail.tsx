@@ -27,6 +27,7 @@ const UserDetail = ({
           className="rounded-full object-cover size-28"
           src={user.profile.url}
           alt="user profile"
+          title={user.username}
         />
         <div className="flex flex-col justify-center items-center sm:items-start gap-y-3">
           <h1 className="text-2xl dark:text-white text-darkBlue font-medium">

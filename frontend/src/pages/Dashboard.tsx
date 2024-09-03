@@ -8,8 +8,6 @@ import {
 } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
-import { Suspense } from "react";
-
 const Dashboard = () => {
   const { data: blogs, isPending, isError } = useGetCurrentUserBlogs();
   return (
@@ -21,21 +19,17 @@ const Dashboard = () => {
       className="w-full flex flex-col gap-y-2 flex-grow max-w-3xl mx-auto p-3"
     >
       <SEO title="Dashboard" description="Dashboard" />
-      <div className="space-y-2">
-        <h1 className="dark:text-white text-darkBlue font-medium text-xl">
-          Dashboard:
-        </h1>
-        <Statistics />
-      </div>
+      <h1 className="dark:text-white text-darkBlue font-medium text-2xl">
+        Dashboard:
+      </h1>
+      <Statistics />
       <div className="flex flex-col flex-grow">
         {isPending ? (
           <CenteredSpinner />
         ) : isError ? (
           <Error />
         ) : (
-          <Suspense fallback={<CenteredSpinner />}>
-            <DashboardBlogList blogs={blogs} />
-          </Suspense>
+          <DashboardBlogList blogs={blogs} />
         )}
       </div>
     </motion.div>

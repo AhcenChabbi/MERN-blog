@@ -1,17 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { MdCreate } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { MdOutlineDashboard } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
-import { FaRegBookmark } from "react-icons/fa6";
-import { GoSignOut } from "react-icons/go";
-import { AUTH, useAuth } from "../hooks/queries/useAuth";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../lib/api";
-import toast from "react-hot-toast";
-import queryClient from "../config/queryClient";
-import Spinner from "./Spinner";
 import { AnimatePresence, motion } from "framer-motion";
+import { GoSignOut } from "react-icons/go";
+import { MdCreate, MdOutlineDashboard } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { User } from "../constants";
+import { useRef, useEffect, useState } from "react";
+import { useLogout } from "../hooks/mutations/mutations";
+import { FaRegBookmark } from "react-icons/fa6";
+import { IoSettingsOutline } from "react-icons/io5";
 const navLinks = [
   {
     title: "Dashboard",
@@ -29,7 +24,7 @@ const navLinks = [
     icon: <IoSettingsOutline />,
   },
 ];
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ user }: { user: User }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => {
     setIsOpen((prev) => !prev);
@@ -37,19 +32,7 @@ const ProfileDropdown = () => {
   const closeDropdown = () => {
     setIsOpen(false);
   };
-  const { user, isLoading } = useAuth();
-  const { mutate: signOut } = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [AUTH] });
-      queryClient.removeQueries({ queryKey: [AUTH] });
-      toast.success("Logout successful");
-    },
-    onError: () => {
-      toast.error("Logout failed. Please try again.");
-    },
-  });
-
+  const { mutate: signOut } = useLogout();
   const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,15 +43,12 @@ const ProfileDropdown = () => {
         closeDropdown();
       }
     };
-
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [dropdownRef]);
-  return isLoading ? (
-    <Spinner />
-  ) : user ? (
+  return (
     <div className="flex items-center gap-3 relative">
       <Link
         to="/createblog"
@@ -147,21 +127,6 @@ const ProfileDropdown = () => {
         </AnimatePresence>
       </div>
     </div>
-  ) : (
-    <>
-      <Link
-        className="py-1.5  dark:text-white text-darkBlue px-3 font-medium"
-        to="/signin"
-      >
-        Sign in
-      </Link>
-      <Link
-        className="py-1.5  dark:text-darkBlue dark:bg-white bg-darkBlue  text-white border rounded-lg px-3 transition-colors duration-300  font-medium hover:bg-transparent hover:text-darkBlue hover:border-darkBlue dark:hover:border-white dark:hover:bg-transparent dark:hover:text-white"
-        to="/signup"
-      >
-        Sign up
-      </Link>
-    </>
   );
 };
 
