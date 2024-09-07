@@ -7,8 +7,8 @@ const Hero = () => {
         Welcome to {BlogName} Blog !
       </h1>
       <p className="text-center dark:text-gray-400 text-gray-600 text-lg max-w-96">
-        Here you'll find a variety of articles and tutorials on topics such as
-        web development, software engineering, and programming languages.
+        We're a place where coders share, stay up-to-date and grow their
+        careers.
       </p>
     </div>
   );

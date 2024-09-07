@@ -1,7 +1,6 @@
 import { Blog } from "../constants";
 import { Link } from "react-router-dom";
 import DashboardBlogCard from "./DashboardBlogCard";
-
 const DashboardBlogList = ({ blogs }: { blogs: Blog[] }) => {
   return blogs.length > 0 ? (
     <div className="space-y-2">

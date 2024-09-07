@@ -7,7 +7,6 @@ import { IoBookmarkOutline } from "react-icons/io5";
 const AuthorBlogCard = (authorBlog: Blog) => {
   return (
     <div
-      key={authorBlog._id}
       onClick={() => navigate(`/blog/${authorBlog._id}`)}
       className="bg-white border border-gray-200 rounded-md shadow dark:bg-gray-800 cursor-pointer dark:border-gray-700 overflow-hidden hover:border-blue-600 dark:hover:border-blue-600 transition-all duration-300 hover:cursor-pointer "
     >

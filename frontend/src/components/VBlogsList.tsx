@@ -1,11 +1,9 @@
 import { Blog } from "../constants";
 import AuthorBlogCard from "./AuthorBlogCard";
-type ReadingListBlogsProps = {
-  blogs: Blog[];
-};
-const ReadingListBlogs = ({ blogs }: ReadingListBlogsProps) => {
+
+const VBlogsList = ({ blogs }: { blogs: Blog[] }) => {
   return (
-    <div className="flex flex-col gap-y-3">
+    <div className="flex flex-col gap-y-2 flex-grow">
       {blogs.map((blog) => (
         <AuthorBlogCard key={blog._id} {...blog} />
       ))}
@@ -13,4 +11,4 @@ const ReadingListBlogs = ({ blogs }: ReadingListBlogsProps) => {
   );
 };
 
-export default ReadingListBlogs;
+export default VBlogsList;

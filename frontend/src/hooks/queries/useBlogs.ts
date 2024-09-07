@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   getBlogbyId,
   getBlogs,
@@ -11,17 +11,16 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 export const allBlogs = "Blogs";
 export function useGetBlogs(page: number, limit: number) {
-  return useQuery({
+  return useSuspenseQuery({
     queryFn: () => getBlogs(page, limit),
     queryKey: [allBlogs, { page }],
-    placeholderData: keepPreviousData,
     staleTime: FIVE_MINUTES,
   });
 }
 
 export const blog = "blog";
 export const useGetBlogById = (blogId: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryFn: () => getBlogbyId(blogId),
     queryKey: [blog, blogId],
     retry: 0,
@@ -31,20 +30,19 @@ export const useGetBlogById = (blogId: string) => {
   });
 };
 export const readinglist = "readingList";
-export const useReadingList = (
+export const useGetReadingList = (
   blogIds: string[],
   page: number,
   limit: number
 ) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [readinglist],
     queryFn: () => getReadingList(blogIds, page, limit),
-    placeholderData: keepPreviousData,
   });
 };
 export const currentUserBlogs = "currentUserBlogs";
 export const useGetCurrentUserBlogs = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [currentUserBlogs],
     queryFn: () => getCurrentUserBlogs(),
     staleTime: FIVE_MINUTES,
@@ -52,7 +50,7 @@ export const useGetCurrentUserBlogs = () => {
 };
 export const userAndUserBlogs = "userAndUserBlogs";
 export const useGetUserAndUserBlogs = (username: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [userAndUserBlogs, { username }],
     queryFn: () => getUserAndUserBlogs(username),
     staleTime: FIVE_MINUTES,

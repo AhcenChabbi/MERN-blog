@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useGetUserAndUserBlogs } from "../hooks/queries/useBlogs";
-import { CenteredSpinner, Error, ProfileLayout } from "../components";
+import { LoadingIndicator, ProfileLayout } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
+import { Suspense } from "react";
 const UserProfile = () => {
   const { username } = useParams();
-  const { data, isPending, isError } = useGetUserAndUserBlogs(username || "");
+  const { data } = useGetUserAndUserBlogs(username || "");
   return (
     <motion.div
       variants={variants}
@@ -14,13 +15,9 @@ const UserProfile = () => {
       exit="exit"
       className="w-full max-w-2xl mx-auto px-3 flex-grow flex flex-col gap-y-2"
     >
-      {isPending ? (
-        <CenteredSpinner />
-      ) : isError ? (
-        <Error message="User not found" />
-      ) : (
+      <Suspense fallback={<LoadingIndicator message="Loading Profile..." />}>
         <ProfileLayout user={data.user} blogs={data.blogs} />
-      )}
+      </Suspense>
     </motion.div>
   );
 };

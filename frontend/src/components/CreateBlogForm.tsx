@@ -6,10 +6,10 @@ import { LuUploadCloud } from "react-icons/lu";
 import { FaRegTrashCan } from "react-icons/fa6";
 import Spinner from "./Spinner";
 import { convertBase64, getModifiedData, isEmptyObject } from "../utils";
+import { useRef } from "react";
 import TextEditor from "./TextEditor";
 import { useCreateBlog, useUpdateBlog } from "../hooks/mutations/mutations";
 import { useLocation } from "react-router-dom";
-import { useRef } from "react";
 import toast from "react-hot-toast";
 type FormFields = z.infer<typeof blogSchema>;
 type LocationState = {

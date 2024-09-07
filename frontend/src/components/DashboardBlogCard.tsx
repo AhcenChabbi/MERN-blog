@@ -2,7 +2,8 @@ import { Blog } from "../constants";
 import { motion } from "framer-motion";
 import { navigate } from "../lib/navigation";
 import { formatDate } from "../utils";
-import { FaRegEye, FaRegHeart } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa6";
 import { useDeleteBlog } from "../hooks/mutations/mutations";
 const DashboardBlogCard = ({ blog, index }: { blog: Blog; index: number }) => {
   const { mutate: deleteBlog } = useDeleteBlog();
@@ -16,7 +17,6 @@ const DashboardBlogCard = ({ blog, index }: { blog: Blog; index: number }) => {
         delay: index * 0.2,
         type: "spring",
       }}
-      key={blog._id}
       onClick={() => {
         navigate(`/blog/${blog._id}`);
       }}

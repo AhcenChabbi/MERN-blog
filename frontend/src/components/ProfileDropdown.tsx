@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { GoSignOut } from "react-icons/go";
-import { MdCreate, MdOutlineDashboard } from "react-icons/md";
+import { MdCreate } from "react-icons/md";
+import { MdOutlineDashboard } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { User } from "../constants";
 import { useRef, useEffect, useState } from "react";

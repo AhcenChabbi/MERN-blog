@@ -1,10 +1,11 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Blog } from "../constants";
 import { formatDate } from "../utils";
 import { useAuth } from "../hooks/queries/useAuth";
 import { MdCreate } from "react-icons/md";
 import Highlight from "react-highlight";
-import AuthorBlogs from "./AuthorBlogs";
+const AuthorBlogs = lazy(() => import("./AuthorBlogs"));
 import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
 import { motion } from "framer-motion";
@@ -16,6 +17,7 @@ import { htmlToText } from "html-to-text";
 import { useGetPageUrl } from "../hooks/useGetPageUrl";
 import LikeAndBookmarkBlog from "./LikeAndBookmarkBlog";
 import LoginSignUpModal from "./LoginOrSignUpModal";
+import LoadingIndicator from "./LoadingIndicator";
 const BlogDetail = ({
   blog: {
     author: {
@@ -37,29 +39,23 @@ const BlogDetail = ({
   authorBlogs: Blog[];
 }) => {
   const { user } = useAuth();
-
   const isCurrentUserAuthor = user && user.username === username;
   const userProfileRoute = isCurrentUserAuthor ? "/profile" : `/${username}`;
-
   const { storedValue, setItem } = useLocalStorage<string[]>(
     VISITED_BlOGS_KEY,
     []
   );
-
   const { mutate: incrementTotalVisit } = useIncrementTotalVisit(
     (data: string) => {
       setItem([...storedValue, data]);
     }
   );
-
   useEffect(() => {
     if (!storedValue.includes(blogId)) {
       incrementTotalVisit(blogId);
     }
   }, [blogId, incrementTotalVisit, storedValue]);
-
   const dialogRef = useRef<HTMLDialogElement>(null);
-
   const showModal = useCallback(() => {
     dialogRef.current?.showModal();
   }, []);
@@ -149,7 +145,11 @@ const BlogDetail = ({
             totalReaction={totalReaction}
           />
         </div>
-        <AuthorBlogs authorBlogs={authorBlogs} />
+        <Suspense
+          fallback={<LoadingIndicator message="Loading author's blogs" />}
+        >
+          <AuthorBlogs authorBlogs={authorBlogs} />
+        </Suspense>
       </motion.div>
       <LoginSignUpModal dialogRef={dialogRef} />
     </>

@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { userAndUserBlogs } from "../lib/api";
-import AuthorBlogCard from "./AuthorBlogCard";
 import { motion } from "framer-motion";
+import { lazy, Suspense } from "react";
+import AuthorBlogsListSkeleton from "./Skeletons/AuthorBlogsListSkeleton";
+const VBlogsList = lazy(() => import("./VBlogsList"));
 const UserBlogList = ({ blogs, user }: userAndUserBlogs) => {
   const location = useLocation();
   const inProfilePage = location.pathname === "/profile";
@@ -15,11 +17,9 @@ const UserBlogList = ({ blogs, user }: userAndUserBlogs) => {
       <h2 className="dark:text-white text-darkBlue font-medium text-xl">
         {inProfilePage ? "Your" : user?.username + "'s"} blogs:
       </h2>
-      <div className="flex flex-col gap-y-2 flex-grow">
-        {blogs.map((blog) => (
-          <AuthorBlogCard key={blog._id} {...blog} />
-        ))}
-      </div>
+      <Suspense fallback={<AuthorBlogsListSkeleton />}>
+        <VBlogsList blogs={blogs} />
+      </Suspense>
     </motion.div>
   ) : (
     <div className="flex flex-col gap-y-1 items-center justify-center flex-grow">

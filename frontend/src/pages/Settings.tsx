@@ -1,8 +1,8 @@
 import {
   BasicInfo,
-  CenteredSpinner,
   ChangePassword,
   DeleteAccount,
+  LoadingIndicator,
   SEO,
 } from "../components";
 import { motion } from "framer-motion";
@@ -19,7 +19,7 @@ const Settings = () => {
     >
       <SEO title="Settings" description="Settings" />
       <div className="space-y-2 flex-grow">
-        <Suspense fallback={<CenteredSpinner />}>
+        <Suspense fallback={<LoadingIndicator message="Loading Settings..." />}>
           <BasicInfo />
           <ChangePassword />
           <DeleteAccount />

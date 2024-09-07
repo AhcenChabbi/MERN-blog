@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import queryClient from "./config/queryClient";
 import { setNavigate } from "./lib/navigation";
-import { AnimatedRoutes, Header } from "./components";
+import { Header } from "./components";
+import AnimatedRoutes from "./pages/AnimatedRoutes";
 
 function App() {
   const navigate = useNavigate();

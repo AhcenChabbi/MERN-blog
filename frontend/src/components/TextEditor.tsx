@@ -1,10 +1,10 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Toolbar from "./Toolbar";
 import Underline from "@tiptap/extension-underline";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { common, createLowlight } from "lowlight";
+import Toolbar from "./Toolbar";
 const extensions = [
   StarterKit.configure({
     codeBlock: false,

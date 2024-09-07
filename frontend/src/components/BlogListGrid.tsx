@@ -1,6 +1,5 @@
 import { Blog } from "../constants";
 import BlogCard from "./BlogCard";
-
 type Props = {
   blogs: Blog[];
 };

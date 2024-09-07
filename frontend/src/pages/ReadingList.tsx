@@ -1,25 +1,35 @@
-import { useState } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import { User } from "../constants";
 import { useAuth } from "../hooks/queries/useAuth";
-import { useReadingList } from "../hooks/queries/useBlogs";
-import {
-  CenteredSpinner,
-  EmptyReadingList,
-  Error,
-  PaginationBar,
-  ReadingListBlogs,
-  SEO,
-} from "../components";
+import { useGetReadingList } from "../hooks/queries/useBlogs";
+import { ErrorFallback, PaginationBar, SEO } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
+import { Link } from "react-router-dom";
+import AuthorBlogsListSkeleton from "../components/Skeletons/AuthorBlogsListSkeleton";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+const VBlogsList = lazy(() => import("../components/VBlogsList"));
 const ReadingList = () => {
   const { user } = useAuth() as { user: User };
   const [page, setPage] = useState(1);
-  const { data, isPending, isError, isPlaceholderData } = useReadingList(
-    user.bookmarkedBlogs,
-    page,
-    3
-  );
+  const {
+    data: { blogs, totalPages },
+  } = useGetReadingList(user.bookmarkedBlogs, page, 3);
+  const increment = useCallback(() => {
+    () => {
+      if (page < totalPages) {
+        setPage((prev) => prev + 1);
+      }
+    };
+  }, [page, totalPages]);
+  const decrement = useCallback(() => {
+    () => {
+      if (page > 1) {
+        setPage((prev) => prev - 1);
+      }
+    };
+  }, [page]);
   return (
     <motion.div
       variants={variants}
@@ -29,34 +39,43 @@ const ReadingList = () => {
       className="w-full flex-grow max-w-2xl flex mx-auto py-2 px-2.5"
     >
       <SEO title="Reading List" description="Reading List" />
-      {isPending ? (
-        <CenteredSpinner />
-      ) : isError ? (
-        <Error />
-      ) : data.blogs.length > 0 ? (
-        <div className="flex flex-col gap-y-3 flex-grow">
-          <h1 className="dark:text-white text-darkBlue font-medium text-2xl">
+      {blogs.length > 0 ? (
+        <div className="flex flex-col flex-grow">
+          <h1 className="dark:text-white text-darkBlue font-medium mb-3 text-2xl">
             Reading List:
           </h1>
-          <ReadingListBlogs blogs={data.blogs} />
-          <PaginationBar
-            decrement={() => {
-              setPage((prev) => Math.max(prev - 1, 1));
-            }}
-            increment={() => {
-              if (!isPlaceholderData && page < data.totalPages) {
-                setPage((prev) => prev + 1);
-              }
-            }}
-            isPlaceholderData={isPlaceholderData}
-            page={page}
-            totalPages={data.totalPages}
-          />
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<AuthorBlogsListSkeleton />}>
+                  <VBlogsList blogs={blogs} />
+                  <PaginationBar
+                    decrement={decrement}
+                    increment={increment}
+                    page={page}
+                    totalPages={totalPages}
+                  />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         </div>
       ) : (
         <EmptyReadingList />
       )}
     </motion.div>
+  );
+};
+const EmptyReadingList = () => {
+  return (
+    <div className="w-full flex flex-col gap-y-2 text-center">
+      <p className="text-2xl font-semibold dark:text-white text-darkBlue">
+        Reading List is empty
+      </p>
+      <Link to="/" className="link">
+        Back to home
+      </Link>
+    </div>
   );
 };
 

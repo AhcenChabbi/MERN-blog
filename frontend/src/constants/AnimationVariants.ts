@@ -7,7 +7,7 @@ export const variants: Variants = {
   },
   animate: {
     opacity: 1,
-    transition: { duration: 0.3, type: "spring" },
+    transition: { duration: 0.5, type: "spring" },
   },
   exit: {
     opacity: 0,
