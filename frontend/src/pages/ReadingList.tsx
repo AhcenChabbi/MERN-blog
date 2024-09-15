@@ -1,7 +1,6 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { User } from "../constants";
 import { useAuth } from "../hooks/queries/useAuth";
-import { useGetReadingList } from "../hooks/queries/useBlogs";
 import { ErrorFallback, PaginationBar, SEO } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
@@ -9,6 +8,7 @@ import { Link } from "react-router-dom";
 import AuthorBlogsListSkeleton from "../components/Skeletons/AuthorBlogsListSkeleton";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
+import { useGetReadingList } from "../hooks/queries/useGetReadingList";
 const VBlogsList = lazy(() => import("../components/VBlogsList"));
 const ReadingList = () => {
   const { user } = useAuth() as { user: User };
@@ -16,20 +16,16 @@ const ReadingList = () => {
   const {
     data: { blogs, totalPages },
   } = useGetReadingList(user.bookmarkedBlogs, page, 3);
-  const increment = useCallback(() => {
-    () => {
-      if (page < totalPages) {
-        setPage((prev) => prev + 1);
-      }
-    };
-  }, [page, totalPages]);
-  const decrement = useCallback(() => {
-    () => {
-      if (page > 1) {
-        setPage((prev) => prev - 1);
-      }
-    };
-  }, [page]);
+  const increment = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+  const decrement = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
   return (
     <motion.div
       variants={variants}

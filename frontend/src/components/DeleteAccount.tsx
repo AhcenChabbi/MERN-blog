@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
-import { useDeleteAccount } from "../hooks/mutations/mutations";
 import Spinner from "./Spinner";
+import { useDeleteAccount } from "../hooks/mutations/useDeleteAccount";
 const DeleteAccount = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   return (

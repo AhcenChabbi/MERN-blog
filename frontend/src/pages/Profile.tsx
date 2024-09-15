@@ -1,10 +1,10 @@
 import { User } from "../constants";
 import { useAuth } from "../hooks/queries/useAuth";
 import { LoadingIndicator, ProfileLayout } from "../components";
-import { useGetCurrentUserBlogs } from "../hooks/queries/useBlogs";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
 import { Suspense } from "react";
+import { useGetCurrentUserBlogs } from "../hooks/queries/useGetCurrentUserBlogs";
 const Profile = () => {
   const { user } = useAuth() as { user: User };
   const { data: blogs } = useGetCurrentUserBlogs();

@@ -6,10 +6,11 @@ import {
   ErrorFallback,
 } from "../components";
 import { AnimatePresence } from "framer-motion";
-import { Suspense } from "react";
-import { lazy } from "react";
+import { Suspense, lazy } from "react";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
+
+// Pages
 const CreateBlog = lazy(() => import("./CreateBlog"));
 const EmailVerification = lazy(() => import("./EmailVerification"));
 const ForgotPassword = lazy(() => import("./ForgotPassword"));

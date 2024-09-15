@@ -1,2 +1,3 @@
 import partyPopper from "./partyPopper.svg";
-export { partyPopper };
+import error from "./error.svg";
+export { partyPopper, error };

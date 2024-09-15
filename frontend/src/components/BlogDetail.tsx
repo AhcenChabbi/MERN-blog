@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Blog } from "../constants";
 import { formatDate } from "../utils";
@@ -6,10 +6,8 @@ import { useAuth } from "../hooks/queries/useAuth";
 import { MdCreate } from "react-icons/md";
 import Highlight from "react-highlight";
 const AuthorBlogs = lazy(() => import("./AuthorBlogs"));
-import { useCallback, useEffect, useRef } from "react";
-import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import { useIncrementTotalVisit } from "../hooks/mutations/mutations";
 import { variants } from "../constants/AnimationVariants";
 import SEO from "./SEO";
 import { BlogName } from "../constants/Schemas";
@@ -18,12 +16,13 @@ import { useGetPageUrl } from "../hooks/useGetPageUrl";
 import LikeAndBookmarkBlog from "./LikeAndBookmarkBlog";
 import LoginSignUpModal from "./LoginOrSignUpModal";
 import LoadingIndicator from "./LoadingIndicator";
+import { useLocalStorage, VISITED_BlOGS_KEY } from "../hooks/useLocalStorage";
+import { useIncrementTotalVisit } from "../hooks/mutations/useIncrementTotalVisit";
 const BlogDetail = ({
   blog: {
     author: {
       username,
       profile: { url: authorProfile },
-      //_id: userId,
     },
     banner: { url },
     title,
@@ -38,27 +37,23 @@ const BlogDetail = ({
   blog: Blog;
   authorBlogs: Blog[];
 }) => {
-  const { user } = useAuth();
-  const isCurrentUserAuthor = user && user.username === username;
-  const userProfileRoute = isCurrentUserAuthor ? "/profile" : `/${username}`;
-  const { storedValue, setItem } = useLocalStorage<string[]>(
-    VISITED_BlOGS_KEY,
-    []
-  );
-  const { mutate: incrementTotalVisit } = useIncrementTotalVisit(
-    (data: string) => {
-      setItem([...storedValue, data]);
+  const { getItem, setItem } = useLocalStorage<string[]>(VISITED_BlOGS_KEY, []);
+  const storedVisitedBlogs = getItem();
+  const onSuccess = () => {
+    if (!storedVisitedBlogs.includes(blogId)) {
+      setItem([...storedVisitedBlogs, blogId]);
     }
-  );
+  };
+  const { mutate: incrementTotalVisit } = useIncrementTotalVisit(onSuccess);
   useEffect(() => {
-    if (!storedValue.includes(blogId)) {
+    if (!storedVisitedBlogs.includes(blogId)) {
       incrementTotalVisit(blogId);
     }
-  }, [blogId, incrementTotalVisit, storedValue]);
+  }, [blogId, storedVisitedBlogs, incrementTotalVisit]);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const showModal = useCallback(() => {
+  const showModal = () => {
     dialogRef.current?.showModal();
-  }, []);
+  };
   const currentLocation = useGetPageUrl();
   return (
     <>
@@ -87,46 +82,17 @@ const BlogDetail = ({
             title={title}
             loading="lazy"
           />
-          <div className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2.5">
-              <Link to={userProfileRoute} className="cursor-pointer">
-                <img
-                  className="rounded-full size-9 object-cover"
-                  src={authorProfile}
-                  alt="author profile"
-                  title={username}
-                  loading="lazy"
-                />
-              </Link>
-              <div>
-                <Link
-                  to={userProfileRoute}
-                  className="dark:text-blue-400 text-blue-600  hover:underline font-medium"
-                >
-                  {username}
-                </Link>
-                <p className="text-sm font-normal text-gray-700 dark:text-gray-400">
-                  Posted on {formatDate(createdAt)}
-                </p>
-              </div>
-            </div>
-            {isCurrentUserAuthor && (
-              <Link
-                to="/createblog"
-                state={{
-                  defaultValues: { banner: url, title, content },
-                  blogId,
-                  isUpdatingState: true,
-                }}
-                className="flex items-center gap-1 px-4 py-1.5 rounded-3xl border dark:border-blue-400  border-darkBlue hover:bg-blue-50 dark:hover:bg-blue-50/10 transition-colors duration-300"
-              >
-                <MdCreate className="dark:text-blue-400 text-blue-600 " />
-                <span className="dark:text-blue-400 text-blue-600 font-medium">
-                  Edit
-                </span>
-              </Link>
-            )}
-          </div>
+          <BlogInfo
+            {...{
+              username,
+              authorProfile,
+              createdAt,
+              url,
+              title,
+              blogId,
+              content,
+            }}
+          />
           <h1 className="text-xl dark:text-white text-darkBlue font-semibold">
             {title}
           </h1>
@@ -153,6 +119,70 @@ const BlogDetail = ({
       </motion.div>
       <LoginSignUpModal dialogRef={dialogRef} />
     </>
+  );
+};
+
+const BlogInfo = ({
+  username,
+  authorProfile,
+  createdAt,
+  url,
+  title,
+  blogId,
+  content,
+}: {
+  username: string;
+  authorProfile: string;
+  createdAt: string;
+  url: string;
+  title: string;
+  blogId: string;
+  content: string;
+}) => {
+  const { user } = useAuth();
+  const isCurrentUserAuthor = user && user.username === username;
+  const userProfileRoute = isCurrentUserAuthor ? "/profile" : `/${username}`;
+  return (
+    <div className="w-full flex items-center justify-between">
+      <div className="flex items-center gap-x-2.5">
+        <Link to={userProfileRoute} className="cursor-pointer">
+          <img
+            className="rounded-full size-9 object-cover"
+            src={authorProfile}
+            alt="author profile"
+            title={username}
+            loading="lazy"
+          />
+        </Link>
+        <div>
+          <Link
+            to={userProfileRoute}
+            className="dark:text-blue-400 text-blue-600  hover:underline font-medium"
+          >
+            {username}
+          </Link>
+          <p className="text-sm font-normal text-gray-700 dark:text-gray-400">
+            Posted on {formatDate(createdAt)}
+          </p>
+        </div>
+      </div>
+      {isCurrentUserAuthor && (
+        <Link
+          to="/createblog"
+          state={{
+            defaultValues: { banner: url, title, content },
+            blogId,
+            isUpdatingState: true,
+          }}
+          className="flex items-center gap-1 px-4 py-1.5 rounded-3xl border dark:border-blue-400  border-darkBlue hover:bg-blue-50 dark:hover:bg-blue-50/10 transition-colors duration-300"
+        >
+          <MdCreate className="dark:text-blue-400 text-blue-600 " />
+          <span className="dark:text-blue-400 text-blue-600 font-medium">
+            Edit
+          </span>
+        </Link>
+      )}
+    </div>
   );
 };
 

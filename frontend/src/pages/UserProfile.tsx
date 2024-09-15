@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useGetUserAndUserBlogs } from "../hooks/queries/useBlogs";
 import { LoadingIndicator, ProfileLayout } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
 import { Suspense } from "react";
+import { useGetUserAndUserBlogs } from "../hooks/queries/useGetUserAndUserBlogs";
 const UserProfile = () => {
   const { username } = useParams();
   const { data } = useGetUserAndUserBlogs(username || "");

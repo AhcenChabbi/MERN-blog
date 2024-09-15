@@ -1,4 +1,3 @@
-import React from "react";
 import { GrFormNext } from "react-icons/gr";
 import { GrFormPrevious } from "react-icons/gr";
 type Props = {
@@ -36,4 +35,4 @@ const PaginationBar = ({ increment, decrement, page, totalPages }: Props) => {
     </div>
   );
 };
-export default React.memo(PaginationBar) as typeof PaginationBar;
+export default PaginationBar;

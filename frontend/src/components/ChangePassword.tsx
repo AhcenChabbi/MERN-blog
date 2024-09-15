@@ -3,8 +3,8 @@ import { z } from "zod";
 import { updateUserPasswordSchema } from "../constants/Schemas";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateUserPassword } from "../hooks/mutations/mutations";
 import Spinner from "./Spinner";
+import { useUpdateUserPassword } from "../hooks/mutations/useUpdateUserPassword";
 type FormFields = z.infer<typeof updateUserPasswordSchema>;
 const ChangePassword = () => {
   const {

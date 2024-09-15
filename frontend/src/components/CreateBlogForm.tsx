@@ -8,9 +8,10 @@ import Spinner from "./Spinner";
 import { convertBase64, getModifiedData, isEmptyObject } from "../utils";
 import { useRef } from "react";
 import TextEditor from "./TextEditor";
-import { useCreateBlog, useUpdateBlog } from "../hooks/mutations/mutations";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useCreateBlog } from "../hooks/mutations/useCreateBlog";
+import { useUpdateBlog } from "../hooks/mutations/useUpdateBlog";
 type FormFields = z.infer<typeof blogSchema>;
 type LocationState = {
   defaultValues: FormFields;

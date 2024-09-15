@@ -10,8 +10,8 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useAuth } from "../hooks/queries/useAuth";
 import { User } from "../constants";
 import toast from "react-hot-toast";
-import { useUpdateUser } from "../hooks/mutations/mutations";
 import Spinner from "./Spinner";
+import { useUpdateUser } from "../hooks/mutations/useUpdateUser";
 type FormFields = z.infer<typeof UpdateUserSchema>;
 const variants: Variants = {
   initial: {
@@ -43,13 +43,7 @@ const BasicInfo = () => {
     email,
     bio,
   };
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-    setValue,
-    watch,
-  } = useForm<FormFields>({
+  const { register, handleSubmit, setValue, watch } = useForm<FormFields>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues,
   });

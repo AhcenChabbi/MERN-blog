@@ -1,7 +1,8 @@
 import { FaHeart } from "react-icons/fa6";
-import { useBookmarkBlog, useLikeBlog } from "../hooks/mutations/mutations";
 import { IoBookmark } from "react-icons/io5";
 import { useAuth } from "../hooks/queries/useAuth";
+import { useLikeBlog } from "../hooks/mutations/useLikeBlog";
+import { useBookmarkBlog } from "../hooks/mutations/useBookmarkBlog";
 type LikeAndBookmarkBlogProps = {
   blogId: string;
   showModal: () => void;

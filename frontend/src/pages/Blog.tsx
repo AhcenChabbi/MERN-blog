@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import { useGetBlogById } from "../hooks/queries/useBlogs";
 import { BlogDetail, LoadingIndicator } from "../components";
 import { Suspense } from "react";
+import { useGetBlogById } from "../hooks/queries/useGetBlogById";
 
 const Blog = () => {
   const { blogId } = useParams();

@@ -4,10 +4,10 @@ import { MdCreate } from "react-icons/md";
 import { MdOutlineDashboard } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { User } from "../constants";
-import { useRef, useEffect, useState } from "react";
-import { useLogout } from "../hooks/mutations/mutations";
 import { FaRegBookmark } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
+import { useLogout } from "../hooks/mutations/useLogout";
+import useDropdown from "../hooks/useDropdown";
 const navLinks = [
   {
     title: "Dashboard",
@@ -26,29 +26,8 @@ const navLinks = [
   },
 ];
 const ProfileDropdown = ({ user }: { user: User }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleIsOpen = () => {
-    setIsOpen((prev) => !prev);
-  };
-  const closeDropdown = () => {
-    setIsOpen(false);
-  };
+  const { closeDropdown, toggleIsOpen, dropdownRef, isOpen } = useDropdown();
   const { mutate: signOut } = useLogout();
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !event.composedPath().includes(dropdownRef.current)
-      ) {
-        closeDropdown();
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [dropdownRef]);
   return (
     <div className="flex items-center gap-3 relative">
       <Link
@@ -80,6 +59,7 @@ const ProfileDropdown = ({ user }: { user: User }) => {
               className={`z-10 absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-md transition-opacity duration-200 w-44 dark:bg-gray-700 dark:divide-gray-600 overflow-hidden`}
             >
               <Link
+                title={user.username}
                 onClick={closeDropdown}
                 to="/profile"
                 className="px-4 py-3 text-sm text-gray-900 dark:text-white flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
@@ -91,7 +71,9 @@ const ProfileDropdown = ({ user }: { user: User }) => {
                   title={user.username}
                   loading="lazy"
                 />
-                <div className="font-medium">@{user.username}</div>
+                <div className="font-medium text-ellipsis whitespace-nowrap overflow-hidden w-[11ch]">
+                  {user.username}
+                </div>
               </Link>
 
               <ul

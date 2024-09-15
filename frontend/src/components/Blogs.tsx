@@ -1,11 +1,11 @@
-import { useGetBlogs } from "../hooks/queries/useBlogs";
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Link } from "react-router-dom";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./ErrorFallback";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa6";
+import { useGetBlogs } from "../hooks/queries/useGetBlogs";
 const BlogListGrid = lazy(() => import("./BlogListGrid"));
 const PaginationBar = lazy(() => import("./PaginationBar"));
 
@@ -14,20 +14,16 @@ const Blogs = () => {
   const {
     data: { blogs, totalPages },
   } = useGetBlogs(page, 9);
-  const increment = useCallback(() => {
-    () => {
-      if (page < totalPages) {
-        setPage((prev) => prev + 1);
-      }
-    };
-  }, [page, totalPages]);
-  const decrement = useCallback(() => {
-    () => {
-      if (page > 1) {
-        setPage((prev) => prev - 1);
-      }
-    };
-  }, [page]);
+  const increment = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+  const decrement = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
   return (
     <div className="flex-grow flex flex-col">
       {blogs.length ? (

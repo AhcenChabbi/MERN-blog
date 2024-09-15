@@ -1,9 +1,9 @@
-import { useGetCurrentUserBlogs } from "../hooks/queries/useBlogs";
 import { DashboardBlogList, SEO, Statistics } from "../components";
 import { motion } from "framer-motion";
 import { variants } from "../constants/AnimationVariants";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
 import { Suspense } from "react";
+import { useGetCurrentUserBlogs } from "../hooks/queries/useGetCurrentUserBlogs";
 const Dashboard = () => {
   const { data: blogs } = useGetCurrentUserBlogs();
   return (
